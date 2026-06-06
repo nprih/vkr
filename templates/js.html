@@ -1,0 +1,35 @@
+<script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
+
+<script>
+    let pathname = $(location).attr('pathname');
+    let selected
+    $('.nav-link').removeClass('active');
+    switch (pathname) {
+        case "/":
+            selected = $('.nav-link:contains("Главная")');
+            break;
+        case "/login":
+            selected = $('.nav-link:contains("Войти")');
+            break;
+        case "/register":
+            selected = $('.nav-link:contains("Регистрация")');
+            break;
+    }
+    selected.addClass('active');
+
+    $('.login').on('click', function () {
+        let login = $('#loginUsername')[0].value;
+        let pass = $('#loginPassword')[0].value;
+        $.ajax({
+            url: '/login',
+            type: "POST",
+            data: { 'login': login, 'pass': pass },
+            dataType: 'json',
+            async: false,
+            success: function(data) {
+                console.log(data);
+            }
+        });
+    })
+
+</script>

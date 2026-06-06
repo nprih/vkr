@@ -1,0 +1,26 @@
+{{template "head.html" .}}
+{{template "header.html" .}}
+
+<section class="page" id="page-login">
+    <div class="form-card">
+        <h2>🔑 Войти в аккаунт</h2>
+        <div id="loginAlert"></div>
+        <div class="form-group">
+            <label for="loginUsername">Логин</label>
+            <input type="text" id="loginUsername" placeholder="Введите логин" autocomplete="username">
+        </div>
+        <div class="form-group">
+            <label for="loginPassword">Пароль</label>
+            <input type="password" id="loginPassword" placeholder="Введите пароль" autocomplete="current-password">
+        </div>
+        <button class="btn btn-primary login">Войти</button>
+        <p class="form-footer">
+            Нет аккаунта? <a href="/register">Зарегистрироваться</a>
+        </p>
+    </div>
+</section>
+
+{{template "js.html" .}}
+
+</body>
+</html>

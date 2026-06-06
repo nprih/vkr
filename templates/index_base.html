@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фото Банк — Главная</title>
+    <style>
+        :root {
+            --bg: #f5f0eb;
+            --surface: #ffffff;
+            --surface-alt: #faf8f5;
+            --text: #2c2416;
+            --text-secondary: #6b5e4a;
+            --accent: #c4792b;
+            --accent-hover: #a86522;
+            --accent-light: #fdf0e2;
+            --danger: #c0392b;
+            --danger-hover: #a93226;
+            --border: #e0d8cc;
+            --shadow-sm: 0 1px 3px rgba(44, 36, 22, 0.06);
+            --shadow: 0 4px 16px rgba(44, 36, 22, 0.10);
+            --shadow-lg: 0 12px 32px rgba(44, 36, 22, 0.14);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.2s ease;
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --header-height: 64px;
+            --max-width: 1280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- HEADER ---- */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: var(--header-height);
+            box-shadow: var(--shadow-sm);
+        }
+        .header-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .logo {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.01em;
+            text-decoration: none;
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            cursor: pointer;
+            white-space: nowrap;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+        .nav-link:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+        .nav-link.active {
+            background: var(--accent);
+            color: #fff;
+        }
+        .nav-link.danger {
+            color: var(--danger);
+        }
+        .nav-link.danger:hover {
+            background: #fde8e8;
+        }
+        .user-badge {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            background: var(--surface-alt);
+            border-radius: 20px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .admin-badge {
+            background: #fef3c7;
+            color: #92400e;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        /* ---- MAIN CONTENT ---- */
+        .main {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 28px 24px 60px;
+        }
+        .page {
+            display: none;
+            animation: fadeSlideIn 0.35s ease;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.01em;
+        }
+        .page-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            font-size: 0.95rem;
+        }
+
+        /* ---- FORMS ---- */
+        .form-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            max-width: 440px;
+            margin: 20px auto;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .form-card h2 {
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--surface-alt);
+            color: var(--text);
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(196, 121, 43, 0.1);
+            background: #fff;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 11px 22px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            font-family: inherit;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            width: 100%;
+            justify-content: center;
+        }
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: var(--danger-hover);
+        }
+        .btn-success {
+            background: #27ae60;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #219a52;
+        }
+        .form-footer {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .form-footer a {
+            color: var(--accent);
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        .alert {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .alert-error {
+            background: #fde8e8;
+            color: #a93226;
+            border: 1px solid #f5c6cb;
+        }
+        .alert-success {
+            background: #e8f8ef;
+            color: #1e7e34;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* ---- PHOTO GRID ---- */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        .photo-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .photo-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        .photo-card-img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            display: block;
+            background: #e8e2d8;
+        }
+        .photo-card-body {
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .photo-card-author {
+            font-weight: 600;
+            color: var(--text);
+        }
+        .photo-card-visibility {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .vis-public {
+            background: #e8f8ef;
+            color: #1e7e34;
+        }
+        .vis-private {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.6;
+        }
+        .empty-state h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        /* ---- ADMIN TABLES ---- */
+        .table-wrapper {
+            overflow-x: auto;
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        th,
+        td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        th {
+            background: var(--surface-alt);
+            font-weight: 700;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        tr:hover td {
+            background: #fdfaf6;
+        }
+        .thumb-mini {
+            width: 48px;
+            height: 36px;
+            object-fit: cover;
+            border-radius: 4px;
+            background: #e8e2d8;
+        }
+
+        /* ---- TOGGLE SWITCH ---- */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ccc;
+            border-radius: 26px;
+            transition: var(--transition);
+        }
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        .toggle-switch input:checked+.toggle-slider {
+            background: var(--accent);
+        }
+        .toggle-switch input:checked+.toggle-slider::before {
+            transform: translateX(22px);
+        }
+
+        /* ---- MODAL / LIGHTBOX ---- */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .lightbox-img {
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            cursor: default;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 28px;
+            font-size: 2.2rem;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1000;
+            transition: var(--transition);
+            line-height: 1;
+        }
+        .lightbox-close:hover {
+            color: #f0c27a;
+            transform: scale(1.15);
+        }
+
+        /* ---- UPLOAD ZONE ---- */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 36px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--surface-alt);
+            margin-bottom: 20px;
+        }
+        .upload-zone:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+        .upload-zone input[type="file"] {
+            display: none;
+        }
+        .upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 768px) {
+            .header-inner {
+                padding: 0 12px;
+                gap: 8px;
+            }
+            .logo {
+                font-size: 1.1rem;
+            }
+            .nav-link {
+                padding: 6px 10px;
+                font-size: 0.82rem;
+            }
+            .photo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 12px;
+            }
+            .form-card {
+                padding: 20px 16px;
+                margin: 10px;
+            }
+            .page-title {
+                font-size: 1.3rem;
+            }
+            th,
+            td {
+                padding: 8px 10px;
+                font-size: 0.78rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .photo-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .nav {
+                gap: 2px;
+            }
+            .nav-link {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+            .user-badge,
+            .admin-badge {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="header">
+    <div class="header-inner">
+        <div class="logo" onclick="navigateTo('home')" title="На главную">
+            <span class="logo-icon">📷</span> Фото Банк
+        </div>
+        <nav class="nav" id="navLinks">
+            <!-- Заполняется динамически -->
+        </nav>
+    </div>
+</header>
+
+<!-- ============ MAIN CONTENT ============ -->
+<main class="main">
+
+    <!-- Страница: Главная (Галерея) -->
+    <section class="page active" id="page-home">
+        <h1 class="page-title">🖼️ Публичная галерея</h1>
+        <p class="page-subtitle">Фотографии, которыми пользователи поделились со всеми</p>
+        <div class="photo-grid" id="galleryGrid">
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <h3>Пока нет публичных фотографий</h3>
+                <p>Зарегистрируйтесь и загрузите первую фотографию!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница: Авторизация -->
+    <section class="page" id="page-login">
+        <div class="form-card">
+            <h2>🔑 Войти в аккаунт</h2>
+            <div id="loginAlert"></div>
+            <div class="form-group">
+                <label for="loginUsername">Логин</label>
+                <input type="text" id="loginUsername" placeholder="Введите логин" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Пароль</label>
+                <input type="password" id="loginPassword" placeholder="Введите пароль" autocomplete="current-password">
+            </div>
+            <button class="btn btn-primary" onclick="handleLogin()">Войти</button>
+            <p class="form-footer">
+                Нет аккаунта? <a onclick="navigateTo('register')">Зарегистрироваться</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Страница: Регистрация -->
+    <section class="page" id="page-register">
+        <div class="form-card">
+            <h2>📝 Регистрация</h2>
+            <div id="registerAlert"></div>
+            <div class="form-group">
+                <label for="registerUsername">Придумайте логин</label>
+                <input type="text" id="registerUsername" placeholder="Логин (мин. 3 символа)" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="registerPassword">Придумайте пароль</label>
+                <input type="password" id="registerPassword" placeholder="Пароль (мин. 4 символа)" autocomplete="new-password">
+            </div>
+            <button class="btn btn-primary" onclick="handleRegister()">Зарегистрироваться</button>
+            <p class="form-footer">
+                Уже есть аккаунт? <a onclick="navigateTo('login')">Войти</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Страница: Панель администратора -->
+    <section class="page" id="page-admin">
+        <h1 class="page-title">⚙️ Панель администратора</h1>
+        <p class="page-subtitle">Управление пользователями и фотографиями</p>
+
+        <h2 style="margin-bottom:12px;font-size:1.2rem;">👥 Пользователи</h2>
+        <div class="table-wrapper" style="margin-bottom:32px;">
+            <table id="adminUsersTable">
+                <thead>
+                <tr><th>Логин</th><th>Роль</th><th>Дата регистрации</th><th>Фото</th><th>Действия</th></tr>
+                </thead>
+                <tbody id="adminUsersBody">
+                <tr><td colspan="5" style="text-align:center;color:var(--text-secondary);">Нет данных</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 style="margin-bottom:12px;font-size:1.2rem;">🖼️ Все фотографии</h2>
+        <div class="table-wrapper">
+            <table id="adminPhotosTable">
+                <thead>
+                <tr><th>Превью</th><th>Название</th><th>Автор</th><th>Видимость</th><th>Дата</th><th>Действия</th></tr>
+                </thead>
+                <tbody id="adminPhotosBody">
+                <tr><td colspan="6" style="text-align:center;color:var(--text-secondary);">Нет фотографий</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Страница: Профиль пользователя -->
+    <section class="page" id="page-profile">
+        <h1 class="page-title">👤 Мой профиль</h1>
+        <p class="page-subtitle" id="profileUsernameDisplay"></p>
+
+        <!-- Зона загрузки -->
+        <div class="upload-zone" onclick="document.getElementById('fileInput').click()" id="uploadZone">
+            <div class="upload-icon">📤</div>
+            <strong>Нажмите, чтобы загрузить фотографию</strong>
+            <p style="font-size:0.85rem;color:var(--text-secondary);">JPEG, PNG, GIF, WebP — до 10 МБ</p>
+            <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)">
+        </div>
+        <div id="uploadFeedback" style="margin-bottom:16px;"></div>
+
+        <h2 style="margin-bottom:12px;font-size:1.2rem;">Мои фотографии</h2>
+        <div class="photo-grid" id="userPhotosGrid">
+            <div class="empty-state">
+                <div class="empty-state-icon">📸</div>
+                <h3>У вас пока нет фотографий</h3>
+                <p>Загрузите первую фотографию через форму выше</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- ============ LIGHTBOX ============ -->
+<div id="lightbox" style="display:none;" class="lightbox-overlay" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightboxImg" class="lightbox-img" src="" alt="Просмотр фото" onclick="event.stopPropagation()">
+</div>
+
+<script>
+    (function() {
+        // ============ КЛЮЧИ localStorage ============
+        const STORAGE_USERS = 'photobank_users';
+        const STORAGE_PHOTOS = 'photobank_photos';
+        const STORAGE_SESSION = 'photobank_session';
+
+        // ============ ДАННЫЕ ============
+        let users = [];
+        let photos = [];
+        let currentSession = null; // { userId, username, role }
+
+        // ============ ЗАГРУЗКА ИЗ localStorage ============
+        function loadData() {
+            try {
+                users = JSON.parse(localStorage.getItem(STORAGE_USERS)) || [];
+                photos = JSON.parse(localStorage.getItem(STORAGE_PHOTOS)) || [];
+                currentSession = JSON.parse(localStorage.getItem(STORAGE_SESSION)) || null;
+            } catch (e) {
+                users = [];
+                photos = [];
+                currentSession = null;
+            }
+        }
+
+        function saveUsers() {
+            localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+        }
+
+        function savePhotos() {
+            localStorage.setItem(STORAGE_PHOTOS, JSON.stringify(photos));
+        }
+
+        function saveSession() {
+            if (currentSession) {
+                localStorage.setItem(STORAGE_SESSION, JSON.stringify(currentSession));
+            } else {
+                localStorage.removeItem(STORAGE_SESSION);
+            }
+        }
+
+        // ============ ИНИЦИАЛИЗАЦИЯ (создание админа по умолчанию) ============
+        function initializeDefaults() {
+            const adminExists = users.some(u => u.role === 'admin');
+            if (!adminExists) {
+                users.push({
+                    id: generateId(),
+                    username: 'admin',
+                    password: 'admin123',
+                    role: 'admin',
+                    createdAt: new Date().toISOString()
+                });
+                saveUsers();
+            }
+            // Если фото нет — добавим 3 демо-фото от админа
+            if (photos.length === 0) {
+                const adminUser = users.find(u => u.role === 'admin');
+                if (adminUser) {
+                    const demoTitles = ['Рассвет над горами', 'Осенний парк', 'Ночной город'];
+                    const demoColors = ['#e8965b', '#c4792b', '#4a5568'];
+                    for (let i = 0; i < 3; i++) {
+                        const dataUrl = generateDemoImage(demoColors[i], demoTitles[i]);
+                        photos.push({
+                            id: generateId(),
+                            userId: adminUser.id,
+                            username: adminUser.username,
+                            dataUrl: dataUrl,
+                            title: demoTitles[i],
+                            visibility: 'public',
+                            createdAt: new Date(Date.now() - (3 - i) * 86400000).toISOString()
+                        });
+                    }
+                    savePhotos();
+                }
+            }
+        }
+
+        function generateDemoImage(bgColor, text) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 600;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+            // Градиент
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, bgColor);
+            gradient.addColorStop(1, lightenColor(bgColor, 30));
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Текст
+            ctx.fillStyle = 'rgba(255,255,255,0.9)';
+            ctx.font = 'bold 28px "Segoe UI", system-ui, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2 - 10);
+            ctx.font = '16px "Segoe UI", system-ui, sans-serif';
+            ctx.fillText('📷 Фото Банк', canvas.width / 2, canvas.height / 2 + 30);
+            return canvas.toDataURL('image/jpeg', 0.8);
+        }
+
+        function lightenColor(hex, percent) {
+            const num = parseInt(hex.replace('#', ''), 16);
+            const r = Math.min(255, (num >> 16) + percent);
+            const g = Math.min(255, ((num >> 8) & 0x00FF00) + percent);
+            const b = Math.min(255, (num & 0x0000FF) + percent);
+            return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+        }
+
+        function generateId() {
+            return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // ============ НАВИГАЦИЯ ============
+        function navigateTo(pageName) {
+            // Скрыть все страницы
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Показать нужную
+            const target = document.getElementById('page-' + pageName);
+            if (target) target.classList.add('active');
+            // Обновить заголовок
+            const titles = {
+                home: 'Фото Банк — Главная',
+                login: 'Фото Банк — Войти',
+                register: 'Фото Банк — Регистрация',
+                admin: 'Фото Банк — Админ-панель',
+                profile: 'Фото Банк — Мой профиль'
+            };
+            document.title = titles[pageName] || 'Фото Банк';
+            // Прокрутка наверх
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Обновить навигацию и контент
+            updateNavigation();
+            renderCurrentPage();
+            // Очистить алерты форм
+            clearAlerts();
+            // Очистить поля ввода
+            clearFormFields();
+        }
+
+        function clearAlerts() {
+            const alertEls = document.querySelectorAll('#loginAlert, #registerAlert, #uploadFeedback');
+            alertEls.forEach(el => el.innerHTML = '');
+        }
+
+        function clearFormFields() {
+            const fields = ['loginUsername', 'loginPassword', 'registerUsername', 'registerPassword'];
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput) fileInput.value = '';
+        }
+
+        function updateNavigation() {
+            const nav = document.getElementById('navLinks');
+            let html = '';
+            if (currentSession) {
+                html +=
+                    `<button class="nav-link" onclick="navigateTo('home')">🏠 Главная</button>`;
+                if (currentSession.role === 'admin') {
+                    html +=
+                        `<button class="nav-link" onclick="navigateTo('admin')">⚙️ Админ-панель</button>`;
+                }
+                html += `<button class="nav-link" onclick="navigateTo('profile')">👤 Профиль</button>`;
+                html +=
+                    `<span class="user-badge">${escapeHtml(currentSession.username)}${currentSession.role === 'admin' ? ' <span class="admin-badge">админ</span>' : ''}</span>`;
+                html +=
+                    `<button class="nav-link danger" onclick="handleLogout()">🚪 Выйти</button>`;
+            } else {
+                html +=
+                    `<button class="nav-link" onclick="navigateTo('home')">🏠 Главная</button>`;
+                html += `<button class="nav-link" onclick="navigateTo('login')">🔑 Войти</button>`;
+                html +=
+                    `<button class="nav-link" onclick="navigateTo('register')">📝 Регистрация</button>`;
+            }
+            nav.innerHTML = html;
+
+            // Подсветка активной ссылки
+            const activePage = document.querySelector('.page.active');
+            if (activePage) {
+                const pageId = activePage.id.replace('page-', '');
+                nav.querySelectorAll('.nav-link').forEach(link => {
+                    const onclick = link.getAttribute('onclick') || '';
+                    link.classList.toggle('active', onclick.includes(`'${pageId}'`));
+                });
+            }
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        // ============ РЕНДЕРИНГ СТРАНИЦ ============
+        function renderCurrentPage() {
+            const activePage = document.querySelector('.page.active');
+            if (!activePage) return;
+            const pageId = activePage.id.replace('page-', '');
+            switch (pageId) {
+                case 'home':
+                    renderGallery();
+                    break;
+                case 'admin':
+                    renderAdminPanel();
+                    break;
+                case 'profile':
+                    renderUserProfile();
+                    break;
+            }
+        }
+
+        // --- Галерея (главная) ---
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            const publicPhotos = photos.filter(p => p.visibility === 'public');
+            if (publicPhotos.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                      <div class="empty-state-icon">📭</div>
+                      <h3>Пока нет публичных фотографий</h3>
+                      <p>Зарегистрируйтесь и загрузите первую фотографию!</p>
+                    </div>`;
+                return;
+            }
+            grid.innerHTML = publicPhotos.map(p => `
+                  <div class="photo-card" onclick="openLightbox('${p.id}')" title="Нажмите для просмотра">
+                    <img class="photo-card-img" src="${p.dataUrl}" alt="${escapeHtml(p.title)}" loading="lazy">
+                    <div class="photo-card-body">
+                      <span class="photo-card-author">${escapeHtml(p.username)}</span>
+                      <span class="photo-card-visibility vis-public">🌐 всем</span>
+                    </div>
+                  </div>
+                `).join('');
+        }
+
+        // --- Админ-панель ---
+        function renderAdminPanel() {
+            if (!currentSession || currentSession.role !== 'admin') {
+                navigateTo('home');
+                return;
+            }
+            // Таблица пользователей
+            const usersBody = document.getElementById('adminUsersBody');
+            if (users.length === 0) {
+                usersBody.innerHTML =
+                    '<tr><td colspan="5" style="text-align:center;color:var(--text-secondary);">Нет пользователей</td></tr>';
+            } else {
+                usersBody.innerHTML = users.map(u => {
+                    const photoCount = photos.filter(p => p.userId === u.id).length;
+                    const isAdmin = u.role === 'admin';
+                    return `
+                      <tr>
+                        <td><strong>${escapeHtml(u.username)}</strong> ${isAdmin ? '<span class="admin-badge">админ</span>' : ''}</td>
+                        <td>${isAdmin ? 'Администратор' : 'Пользователь'}</td>
+                        <td>${formatDate(u.createdAt)}</td>
+                        <td>${photoCount}</td>
+                        <td>
+                          ${!isAdmin ? `<button class="btn btn-danger btn-sm" onclick="adminDeleteUser('${u.id}')" title="Удалить пользователя и все его фото">🗑 Удалить</button>` : '<span style="color:var(--text-secondary);">—</span>'}
+                        </td>
+                      </tr>`;
+                }).join('');
+            }
+
+            // Таблица фотографий
+            const photosBody = document.getElementById('adminPhotosBody');
+            if (photos.length === 0) {
+                photosBody.innerHTML =
+                    '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);">Нет фотографий</td></tr>';
+            } else {
+                photosBody.innerHTML = photos.map(p => `
+                    <tr>
+                      <td><img class="thumb-mini" src="${p.dataUrl}" alt="миниатюра" onclick="openLightbox('${p.id}')" style="cursor:pointer;"></td>
+                      <td>${escapeHtml(p.title)}</td>
+                      <td>${escapeHtml(p.username)}</td>
+                      <td><span class="photo-card-visibility ${p.visibility === 'public' ? 'vis-public' : 'vis-private'}">${p.visibility === 'public' ? '🌐 Всем' : '🔒 Только мне'}</span></td>
+                      <td>${formatDate(p.createdAt)}</td>
+                      <td><button class="btn btn-danger btn-sm" onclick="adminDeletePhoto('${p.id}')">🗑 Удалить</button></td>
+                    </tr>
+                  `).join('');
+            }
+        }
+
+        // --- Профиль пользователя ---
+        function renderUserProfile() {
+            if (!currentSession) {
+                navigateTo('login');
+                return;
+            }
+            document.getElementById('profileUsernameDisplay').textContent =
+                `Логин: ${currentSession.username} | Роль: ${currentSession.role === 'admin' ? 'Администратор' : 'Пользователь'}`;
+
+            const userPhotos = photos.filter(p => p.userId === currentSession.userId);
+            const grid = document.getElementById('userPhotosGrid');
+            if (userPhotos.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                      <div class="empty-state-icon">📸</div>
+                      <h3>У вас пока нет фотографий</h3>
+                      <p>Загрузите первую фотографию через форму выше</p>
+                    </div>`;
+                return;
+            }
+            grid.innerHTML = userPhotos.map(p => `
+                  <div class="photo-card">
+                    <img class="photo-card-img" src="${p.dataUrl}" alt="${escapeHtml(p.title)}" loading="lazy" onclick="openLightbox('${p.id}')" style="cursor:pointer;">
+                    <div class="photo-card-body" style="flex-wrap:wrap;gap:6px;">
+                      <span style="flex:1;min-width:100px;font-weight:600;">${escapeHtml(p.title)}</span>
+                      <label class="toggle-switch" title="Переключить видимость" onclick="event.stopPropagation()">
+                        <input type="checkbox" ${p.visibility === 'public' ? 'checked' : ''} onchange="toggleVisibility('${p.id}', this.checked)">
+                        <span class="toggle-slider"></span>
+                      </label>
+                      <span class="photo-card-visibility ${p.visibility === 'public' ? 'vis-public' : 'vis-private'}" style="font-size:0.7rem;">
+                        ${p.visibility === 'public' ? '🌐 Всем' : '🔒 Только мне'}
+                      </span>
+                      <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); deleteUserPhoto('${p.id}')" style="width:100%;margin-top:4px;">🗑 Удалить</button>
+                    </div>
+                  </div>
+                `).join('');
+        }
+
+        function formatDate(isoStr) {
+            const d = new Date(isoStr);
+            return d.toLocaleDateString('ru-RU', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // ============ АВТОРИЗАЦИЯ ============
+        function handleLogin() {
+            const alertEl = document.getElementById('loginAlert');
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            alertEl.innerHTML = '';
+
+            if (!username || !password) {
+                alertEl.innerHTML = '<div class="alert alert-error">Заполните все поля</div>';
+                return;
+            }
+            const user = users.find(u => u.username === username && u.password === password);
+            if (!user) {
+                alertEl.innerHTML = '<div class="alert alert-error">Неверный логин или пароль</div>';
+                return;
+            }
+            currentSession = { userId: user.id, username: user.username, role: user.role };
+            saveSession();
+            alertEl.innerHTML = '<div class="alert alert-success">✅ Вход выполнен! Перенаправление...</div>';
+            setTimeout(() => navigateTo('home'), 600);
+        }
+
+        function handleRegister() {
+            const alertEl = document.getElementById('registerAlert');
+            const username = document.getElementById('registerUsername').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+            alertEl.innerHTML = '';
+
+            if (!username || username.length < 3) {
+                alertEl.innerHTML =
+                    '<div class="alert alert-error">Логин должен содержать минимум 3 символа</div>';
+                return;
+            }
+            if (!password || password.length < 4) {
+                alertEl.innerHTML =
+                    '<div class="alert alert-error">Пароль должен содержать минимум 4 символа</div>';
+                return;
+            }
+            if (users.some(u => u.username === username)) {
+                alertEl.innerHTML =
+                    '<div class="alert alert-error">Пользователь с таким логином уже существует</div>';
+                return;
+            }
+            const newUser = {
+                id: generateId(),
+                username: username,
+                password: password,
+                role: 'user',
+                createdAt: new Date().toISOString()
+            };
+            users.push(newUser);
+            saveUsers();
+            currentSession = { userId: newUser.id, username: newUser.username, role: newUser.role };
+            saveSession();
+            alertEl.innerHTML =
+                '<div class="alert alert-success">✅ Регистрация успешна! Перенаправление...</div>';
+            setTimeout(() => navigateTo('home'), 600);
+        }
+
+        function handleLogout() {
+            if (confirm('Вы действительно хотите выйти?')) {
+                currentSession = null;
+                saveSession();
+                navigateTo('home');
+            }
+        }
+
+        // ============ ЗАГРУЗКА ФОТО ============
+        function handleFileUpload(event) {
+            const feedback = document.getElementById('uploadFeedback');
+            feedback.innerHTML = '';
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                feedback.innerHTML = '<div class="alert alert-error">Пожалуйста, выберите изображение</div>';
+                return;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                feedback.innerHTML =
+                    '<div class="alert alert-error">Файл слишком большой. Максимальный размер — 10 МБ</div>';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Сжатие через canvas
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const maxDim = 800;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxDim || h > maxDim) {
+                        const ratio = Math.min(maxDim / w, maxDim / h);
+                        w = Math.round(w * ratio);
+                        h = Math.round(h * ratio);
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.78);
+
+                    const title = file.name.replace(/\.[^.]+$/, '') || 'Без названия';
+                    const newPhoto = {
+                        id: generateId(),
+                        userId: currentSession.userId,
+                        username: currentSession.username,
+                        dataUrl: dataUrl,
+                        title: title,
+                        visibility: 'public',
+                        createdAt: new Date().toISOString()
+                    };
+                    photos.push(newPhoto);
+                    savePhotos();
+                    feedback.innerHTML =
+                        '<div class="alert alert-success">✅ Фотография успешно загружена!</div>';
+                    renderUserProfile();
+                    document.getElementById('fileInput').value = '';
+                    // Обновим галерею если фото публичное
+                    updateNavigation();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ============ УПРАВЛЕНИЕ ВИДИМОСТЬЮ ============
+        function toggleVisibility(photoId, isPublic) {
+            const photo = photos.find(p => p.id === photoId);
+            if (!photo) return;
+            if (photo.userId !== currentSession.userId && currentSession.role !== 'admin') return;
+            photo.visibility = isPublic ? 'public' : 'private';
+            savePhotos();
+            renderUserProfile();
+            // Обновить навигацию (галерея могла измениться)
+        }
+
+        // ============ УДАЛЕНИЕ ФОТО (пользователь) ============
+        function deleteUserPhoto(photoId) {
+            if (!confirm('Удалить эту фотографию? Действие необратимо.')) return;
+            const photo = photos.find(p => p.id === photoId);
+            if (!photo) return;
+            if (photo.userId !== currentSession.userId && currentSession.role !== 'admin') return;
+            photos = photos.filter(p => p.id !== photoId);
+            savePhotos();
+            renderUserProfile();
+        }
+
+        // ============ АДМИН: УДАЛЕНИЕ ФОТО ============
+        function adminDeletePhoto(photoId) {
+            if (!confirm('Удалить эту фотографию? Действие необратимо.')) return;
+            if (!currentSession || currentSession.role !== 'admin') return;
+            photos = photos.filter(p => p.id !== photoId);
+            savePhotos();
+            renderAdminPanel();
+        }
+
+        // ============ АДМИН: УДАЛЕНИЕ ПОЛЬЗОВАТЕЛЯ ============
+        function adminDeleteUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user || user.role === 'admin') {
+                alert('Нельзя удалить администратора.');
+                return;
+            }
+            if (!confirm(
+                `Удалить пользователя "${user.username}" и ВСЕ его фотографии? Действие необратимо.`
+            )) return;
+            // Удаляем фото пользователя
+            photos = photos.filter(p => p.userId !== userId);
+            // Удаляем пользователя
+            users = users.filter(u => u.id !== userId);
+            saveUsers();
+            savePhotos();
+            renderAdminPanel();
+        }
+
+        // ============ ЛАЙТБОКС ============
+        function openLightbox(photoId) {
+            const photo = photos.find(p => p.id === photoId);
+            if (!photo) return;
+            document.getElementById('lightboxImg').src = photo.dataUrl;
+            document.getElementById('lightbox').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // ============ ГОРЯЧИЕ КЛАВИШИ ============
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+            // Enter на формах
+            if (e.key === 'Enter') {
+                const activePage = document.querySelector('.page.active');
+                if (activePage) {
+                    const pageId = activePage.id.replace('page-', '');
+                    if (pageId === 'login') handleLogin();
+                    if (pageId === 'register') handleRegister();
+                }
+            }
+        });
+
+        // ============ ЗАПУСК ============
+        function init() {
+            loadData();
+            initializeDefaults();
+            updateNavigation();
+            renderCurrentPage();
+        }
+
+        // Экспорт функций в глобальную область
+        window.navigateTo = navigateTo;
+        window.handleLogin = handleLogin;
+        window.handleRegister = handleRegister;
+        window.handleLogout = handleLogout;
+        window.handleFileUpload = handleFileUpload;
+        window.toggleVisibility = toggleVisibility;
+        window.deleteUserPhoto = deleteUserPhoto;
+        window.adminDeletePhoto = adminDeletePhoto;
+        window.adminDeleteUser = adminDeleteUser;
+        window.openLightbox = openLightbox;
+        window.closeLightbox = closeLightbox;
+
+        init();
+    })();
+</script>
+</body>
+</html>

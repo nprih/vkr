@@ -1,0 +1,26 @@
+{{template "head.html" .}}
+{{template "header.html" .}}
+
+<section class="page" id="page-register">
+    <div class="form-card">
+        <h2>📝 Регистрация</h2>
+        <div id="registerAlert"></div>
+        <div class="form-group">
+            <label for="registerUsername">Придумайте логин</label>
+            <input type="text" id="registerUsername" placeholder="Логин (мин. 3 символа)" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label for="registerPassword">Придумайте пароль</label>
+            <input type="password" id="registerPassword" placeholder="Пароль (мин. 4 символа)" autocomplete="new-password">
+        </div>
+        <button class="btn btn-primary" onclick="handleRegister()">Зарегистрироваться</button>
+        <p class="form-footer">
+            Уже есть аккаунт? <a href="/login">Войти</a>
+        </p>
+    </div>
+</section>
+
+{{template "js.html" .}}
+
+</body>
+</html>
