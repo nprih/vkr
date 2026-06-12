@@ -1,13 +1,17 @@
 package main
 
 import (
+	"strconv"
 	"vkr/internal/handler"
 
 	"github.com/gin-gonic/gin"
 )
 
+const Port = 8080
+
 func main() {
 	router := gin.Default()
+	router.Static("/web", "web")
 	router.LoadHTMLGlob("templates/*")
 
 	router.GET("/", handler.IndexHandler)
@@ -15,5 +19,5 @@ func main() {
 	//router.POST("/login", handler.PostLoginHandler)
 	router.GET("/register", handler.RegisterHandler)
 
-	router.Run(":8080")
+	router.Run(":" + strconv.Itoa(Port))
 }
