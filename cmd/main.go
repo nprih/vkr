@@ -10,14 +10,18 @@ import (
 const Port = 8080
 
 func main() {
+
 	router := gin.Default()
 	router.Static("/web", "web")
 	router.LoadHTMLGlob("templates/*")
 
 	router.GET("/", handler.IndexHandler)
+
 	router.GET("/login", handler.GetLoginHandler)
 	router.POST("/login", handler.PostLoginHandler)
-	router.GET("/register", handler.RegisterHandler)
+
+	router.GET("/register", handler.GetRegisterHandler)
+	router.POST("/register", handler.PostRegisterHandler)
 
 	router.Run(":" + strconv.Itoa(Port))
 }

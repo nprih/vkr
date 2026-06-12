@@ -19,9 +19,20 @@ $('.login').on('click', function () {
         login: $('#loginUsername')[0].value,
         password: $('#loginPassword')[0].value
     }
-    console.log(post)
+    sendPost(post, '/login')
+})
+
+$('.register').on('click', function () {
+    let post = {
+        login: $('#registerUsername')[0].value,
+        password: $('#registerPassword')[0].value
+    }
+    sendPost(post, 'register')
+})
+
+function sendPost(post, url) {
     $.ajax({
-        url: '/login',
+        url: url,
         type: "POST",
         contentType: 'application/json',
         data: JSON.stringify(post),
@@ -31,4 +42,4 @@ $('.login').on('click', function () {
             console.log(data);
         }
     });
-})
+}

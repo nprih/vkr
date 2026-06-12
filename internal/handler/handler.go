@@ -7,7 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type LoginRequest struct {
+var req Credentials
+
+type Credentials struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
 }
@@ -25,7 +27,6 @@ func GetLoginHandler(c *gin.Context) {
 }
 
 func PostLoginHandler(c *gin.Context) {
-	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -35,8 +36,18 @@ func PostLoginHandler(c *gin.Context) {
 	log.Println("New login try:", req.Login)
 }
 
-func RegisterHandler(c *gin.Context) {
+func GetRegisterHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "register.html", gin.H{
 		"title": "Main website",
 	})
+}
+
+func PostRegisterHandler(c *gin.Context) {
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	log.Println("New registry try:", req.Login, req.Password)
 }
