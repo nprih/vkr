@@ -41,11 +41,11 @@ func PostLoginHandler(c *gin.Context) {
 		log.Printf("Пользователь %s не найден", req.Login)
 		return
 	}
-	login := Credentials{
-		Login:    user.Login,
-		Password: user.Password,
+	if service.CheckPassword(req.Password, user.Password) {
+		log.Println("Пароль совпадает")
+	} else {
+		log.Println("Не верный пароль")
 	}
-	log.Println(login)
 }
 
 func GetRegisterHandler(c *gin.Context) {

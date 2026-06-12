@@ -14,10 +14,10 @@ func HashPassword(password string) (string, error) {
 	return hash, nil
 }
 
-//func CheckPassword(password, hash) bool {
-//	match, err := argon2id.ComparePasswordAndHash(password, hash)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	return match
-//}
+func CheckPassword(password string, hash string) bool {
+	match, err := argon2id.ComparePasswordAndHash(password, hash)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return match
+}
