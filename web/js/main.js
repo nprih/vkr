@@ -15,12 +15,16 @@ switch (pathname) {
 selected.addClass('active');
 
 $('.login').on('click', function () {
-    let login = $('#loginUsername')[0].value;
-    let pass = $('#loginPassword')[0].value;
+    let post = {
+        login: $('#loginUsername')[0].value,
+        password: $('#loginPassword')[0].value
+    }
+    console.log(post)
     $.ajax({
         url: '/login',
         type: "POST",
-        data: { 'login': login, 'pass': pass },
+        contentType: 'application/json',
+        data: JSON.stringify(post),
         dataType: 'json',
         async: false,
         success: function(data) {

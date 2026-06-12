@@ -16,7 +16,7 @@ func main() {
 
 	router.GET("/", handler.IndexHandler)
 	router.GET("/login", handler.GetLoginHandler)
-	//router.POST("/login", handler.PostLoginHandler)
+	router.POST("/login", handler.PostLoginHandler)
 	router.GET("/register", handler.RegisterHandler)
 
 	router.Run(":" + strconv.Itoa(Port))

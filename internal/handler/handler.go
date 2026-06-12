@@ -1,12 +1,16 @@
 package handler
 
 import (
-	"encoding/json"
-	"io"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
+
+type LoginRequest struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
+}
 
 func IndexHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "main.html", gin.H{
@@ -20,15 +24,15 @@ func GetLoginHandler(c *gin.Context) {
 	})
 }
 
-func PostLoginHandler(w http.ResponseWriter, r *http.Request) {
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, "Can't read body", http.StatusBadRequest)
+func PostLoginHandler(c *gin.Context) {
+	var req LoginRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
-	defer r.Body.Close()
-
-	json.NewEncoder(w).Encode(string(body))
+	log.Println("New login try:", req.Login)
 }
 
 func RegisterHandler(c *gin.Context) {
