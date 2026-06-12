@@ -3,6 +3,7 @@ package handler
 import (
 	"log"
 	"net/http"
+	"vkr/internal/db"
 
 	"github.com/gin-gonic/gin"
 )
@@ -50,4 +51,5 @@ func PostRegisterHandler(c *gin.Context) {
 		return
 	}
 	log.Println("New registry try:", req.Login, req.Password)
+	db.RegisterUser(req.Login, req.Password)
 }
