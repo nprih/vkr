@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "modernc.org/sqlite"
@@ -23,19 +24,18 @@ func connect() (*sql.DB, error) {
 	return db, nil
 }
 
-func RegisterUser(login string, password string) {
+func RegisterUser(login string, password string) (message string, err error) {
 	conn, err := connect()
 	if err != nil {
 		log.Println(err)
-		return
+		return "", err
 	}
 	defer conn.Close()
 
 	_, err = conn.Exec("INSERT INTO users (login, password) VALUES ($1, $2)", login, password)
 	if err != nil {
 		log.Println(err)
-		return
+		return "", err
 	}
-
-	log.Println("Пользователь добавлен:", login, password)
+	return fmt.Sprintf("Пользователь %s добавлен", login), nil
 }

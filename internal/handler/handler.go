@@ -46,8 +46,9 @@ func GetRegisterHandler(c *gin.Context) {
 
 func PostRegisterHandler(c *gin.Context) {
 	if err := c.ShouldBindJSON(&req); err != nil {
+		log.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+			"message": "Не удалось прочитать отправленные данные",
 		})
 		return
 	}
@@ -56,7 +57,20 @@ func PostRegisterHandler(c *gin.Context) {
 	password, err := service.HashPassword(req.Password)
 	if err != nil {
 		log.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Не удалось хэшировать пароль",
+		})
 		return
 	}
-	db.RegisterUser(req.Login, password)
+	message, err := db.RegisterUser(req.Login, password)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Не удалось создать пользователя",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"message": message,
+	})
 }

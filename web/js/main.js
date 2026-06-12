@@ -39,6 +39,9 @@ function sendPost(post, url) {
         dataType: 'json',
         async: false,
         success: function(data) {
+            if (data.message) {
+                alert(data.message)
+            }
             console.log(data);
         }
     });
