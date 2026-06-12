@@ -35,7 +35,17 @@ func PostLoginHandler(c *gin.Context) {
 		})
 		return
 	}
-	log.Println("New login try:", req.Login)
+	log.Println("New login try:", req.Login, req.Password)
+	user, err := db.GetUserByLogin(req.Login)
+	if err != nil {
+		log.Printf("Пользователь %s не найден", req.Login)
+		return
+	}
+	login := Credentials{
+		Login:    user.Login,
+		Password: user.Password,
+	}
+	log.Println(login)
 }
 
 func GetRegisterHandler(c *gin.Context) {
@@ -62,7 +72,7 @@ func PostRegisterHandler(c *gin.Context) {
 		})
 		return
 	}
-	message, err := db.RegisterUser(req.Login, password)
+	message, err := db.Register(req.Login, password)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{
