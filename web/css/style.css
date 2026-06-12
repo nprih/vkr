@@ -139,7 +139,7 @@ body {
     padding: 28px 24px 60px;
 }
 .page {
-    display: none;
+    display: block;
     animation: fadeSlideIn 0.35s ease;
 }
 .page.active {

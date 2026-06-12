@@ -16,7 +16,7 @@ func IndexHandler(c *gin.Context) {
 
 func GetLoginHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "login.html", gin.H{
-		"title": "Main website",
+		"title": "Login website",
 	})
 }
 
