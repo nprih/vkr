@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"vkr/internal/db"
+	"vkr/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -51,5 +52,11 @@ func PostRegisterHandler(c *gin.Context) {
 		return
 	}
 	log.Println("New registry try:", req.Login, req.Password)
-	db.RegisterUser(req.Login, req.Password)
+
+	password, err := service.HashPassword(req.Password)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	db.RegisterUser(req.Login, password)
 }

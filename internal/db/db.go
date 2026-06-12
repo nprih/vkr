@@ -3,7 +3,6 @@ package db
 import (
 	"database/sql"
 	"log"
-	"vkr/internal/service"
 
 	_ "modernc.org/sqlite"
 )
@@ -31,10 +30,12 @@ func RegisterUser(login string, password string) {
 		return
 	}
 	defer conn.Close()
-	pass, err := service.HashPassword(password)
+
+	_, err = conn.Exec("INSERT INTO users (login, password) VALUES ($1, $2)", login, password)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	log.Println(login, pass)
+
+	log.Println("Пользователь добавлен:", login, password)
 }
