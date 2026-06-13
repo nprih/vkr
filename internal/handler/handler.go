@@ -124,8 +124,11 @@ func PostRegisterHandler(c *gin.Context) {
 }
 
 func GetAdminHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, "main.html", gin.H{
-		"title": "Main website",
+	setValue(c)
+	c.HTML(http.StatusOK, "profile.html", gin.H{
+		"login":    value.Login,
+		"is_login": value.IsLogin,
+		"is_admin": value.IsAdmin,
 	})
 }
 

@@ -1,0 +1,33 @@
+{{template "head.html" .}}
+{{template "header.html" .}}
+
+<section class="page" id="page-admin">
+    <h1 class="page-title">⚙️ Панель администратора</h1>
+    <p class="page-subtitle">Управление пользователями и фотографиями</p>
+
+    <h2 style="margin-bottom:12px;font-size:1.2rem;">👥 Пользователи</h2>
+    <div class="table-wrapper" style="margin-bottom:32px;">
+        <table id="adminUsersTable">
+            <thead>
+            <tr><th>Логин</th><th>Роль</th><th>Дата регистрации</th><th>Фото</th><th>Действия</th></tr>
+            </thead>
+            <tbody id="adminUsersBody">
+            <tr><td colspan="5" style="text-align:center;color:var(--text-secondary);">Нет данных</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2 style="margin-bottom:12px;font-size:1.2rem;">🖼️ Все фотографии</h2>
+    <div class="table-wrapper">
+        <table id="adminPhotosTable">
+            <thead>
+            <tr><th>Превью</th><th>Название</th><th>Автор</th><th>Видимость</th><th>Дата</th><th>Действия</th></tr>
+            </thead>
+            <tbody id="adminPhotosBody">
+            <tr><td colspan="6" style="text-align:center;color:var(--text-secondary);">Нет фотографий</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{{template "foo.html" .}}

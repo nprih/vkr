@@ -29,7 +29,6 @@ func main() {
 	router.GET("/register", handler.GetRegisterHandler)
 	router.POST("/register", handler.PostRegisterHandler)
 
-	// Группа маршрутов для авторизованных пользователей
 	auth := router.Group("/")
 	auth.Use(service.AuthRequired())
 	{
@@ -37,7 +36,6 @@ func main() {
 		auth.GET("/profile", handler.GetProfileHandler)
 	}
 
-	// Группа маршрутов только для администраторов
 	admin := router.Group("/admin")
 	admin.Use(service.AdminRequired())
 	{
