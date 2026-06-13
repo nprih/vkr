@@ -6,6 +6,10 @@ let registerPassword = $('#registerPassword')
 let pathname = $(location).attr('pathname');
 let selected
 
+$('.logo').on('click', function () {
+    window.location.replace(baseUrl + '/')
+})
+
 $('.nav-link').removeClass('active');
 switch (pathname) {
     case "/":

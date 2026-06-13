@@ -24,25 +24,15 @@ type Val struct {
 	IsAdmin bool
 }
 
-func setValue(c *gin.Context, user *db.User) {
+func setValue(c *gin.Context) {
 	session := sessions.Default(c)
-	session.Set("login", user.Login)
-	session.Set("is_login", true)
-	session.Set("is_admin", user.Is_admin)
-	session.Save()
-
 	login, ok := session.Get("login").(string)
-	if !ok {
-		log.Println("Значение login не установлено")
-	}
 	is_login, ok := session.Get("is_login").(bool)
-	if !ok {
-		log.Println("Значение is_login не установлено")
-	}
 	is_admin, ok := session.Get("is_admin").(bool)
 	if !ok {
-		log.Println("Значение is_admin не установлено")
+		log.Println("Значения не установлены")
 	}
+
 	value = Val{
 		Login:   login,
 		IsLogin: is_login,
@@ -50,16 +40,8 @@ func setValue(c *gin.Context, user *db.User) {
 	}
 }
 
-func unsetValue(c *gin.Context) {
-	session := sessions.Default(c)
-	session.Delete("login")
-	session.Delete("is_login")
-	session.Delete("is_admin")
-	session.Save()
-	value = Val{}
-}
-
 func IndexHandler(c *gin.Context) {
+	setValue(c)
 	c.HTML(http.StatusOK, "main.html", gin.H{
 		"login":    value.Login,
 		"is_login": value.IsLogin,
@@ -88,7 +70,9 @@ func PostLoginHandler(c *gin.Context) {
 	}
 	if service.CheckPassword(req.Password, user.Password) {
 		log.Println("Пароль совпадает")
-		setValue(c, user)
+
+		service.SetSession(c, user)
+
 		c.JSON(http.StatusOK, gin.H{
 			"message":  "Login successful",
 			"redirect": "/",
@@ -154,7 +138,7 @@ func PostLogoutHandler(c *gin.Context) {
 	}
 	log.Println("New logout try")
 
-	unsetValue(c)
+	service.UnsetSession(c)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message":  "Logout successful",
@@ -163,6 +147,7 @@ func PostLogoutHandler(c *gin.Context) {
 }
 
 func GetProfileHandler(c *gin.Context) {
+	setValue(c)
 	c.HTML(http.StatusOK, "profile.html", gin.H{
 		"login":    value.Login,
 		"is_login": value.IsLogin,

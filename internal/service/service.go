@@ -3,6 +3,7 @@ package service
 import (
 	"log"
 	"net/http"
+	"vkr/internal/db"
 
 	"github.com/alexedwards/argon2id"
 	"github.com/gin-contrib/sessions"
@@ -25,15 +26,31 @@ func CheckPassword(password string, hash string) bool {
 	return match
 }
 
+func SetSession(c *gin.Context, user *db.User) {
+	session := sessions.Default(c)
+	session.Set("login", user.Login)
+	session.Set("is_login", true)
+	session.Set("is_admin", user.Is_admin)
+	session.Save()
+}
+
+func UnsetSession(c *gin.Context) {
+	session := sessions.Default(c)
+	session.Delete("login")
+	session.Delete("is_login")
+	session.Delete("is_admin")
+	session.Save()
+}
+
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Получаем сессию
+		log.Println("AuthRequired middleware вызван")
 		session := sessions.Default(c)
 
 		// Проверяем, есть ли пользователь в сессии
 		login := session.Get("login")
 		if login == nil {
-			// Пользователь не авторизован - перенаправляем на логин
+			log.Println("Пользователь не авторизован, редирект на /login")
 			c.Redirect(http.StatusFound, "/login")
 			c.Abort() // Прерываем выполнение запроса
 			return
@@ -46,13 +63,13 @@ func AuthRequired() gin.HandlerFunc {
 
 func AdminRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Получаем сессию
+		log.Println("AdminRequired middleware вызван")
 		session := sessions.Default(c)
 
 		// Проверяем права администратора
 		isAdmin, ok := session.Get("is_admin").(bool)
 		if !ok || !isAdmin {
-			// Нет прав администратора
+			log.Println(" Админ не авторизован, редирект на /")
 			c.HTML(http.StatusForbidden, "error.html", gin.H{
 				"error":   "Доступ запрещен",
 				"message": "Требуются права администратора",
