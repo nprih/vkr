@@ -89,7 +89,6 @@ func PostLoginHandler(c *gin.Context) {
 	if service.CheckPassword(req.Password, user.Password) {
 		log.Println("Пароль совпадает")
 		setValue(c, user)
-
 		c.JSON(http.StatusOK, gin.H{
 			"message":  "Login successful",
 			"redirect": "/",
