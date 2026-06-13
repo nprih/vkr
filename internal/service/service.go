@@ -44,19 +44,14 @@ func UnsetSession(c *gin.Context) {
 
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		log.Println("AuthRequired middleware вызван")
 		session := sessions.Default(c)
-
-		// Проверяем, есть ли пользователь в сессии
 		login := session.Get("login")
 		if login == nil {
 			log.Println("Пользователь не авторизован, редирект на /login")
 			c.Redirect(http.StatusFound, "/login")
-			c.Abort() // Прерываем выполнение запроса
+			c.Abort()
 			return
 		}
-
-		// Пользователь авторизован - продолжаем
 		c.Next()
 	}
 }
@@ -65,20 +60,17 @@ func AdminRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		log.Println("AdminRequired middleware вызван")
 		session := sessions.Default(c)
-
-		// Проверяем права администратора
 		isAdmin, ok := session.Get("is_admin").(bool)
 		if !ok || !isAdmin {
 			log.Println(" Админ не авторизован, редирект на /")
 			c.HTML(http.StatusForbidden, "error.html", gin.H{
-				"error":   "Доступ запрещен",
-				"message": "Требуются права администратора",
+				"error":    "Доступ запрещен",
+				"message":  "Требуются права администратора",
+				"redirect": "/",
 			})
 			c.Abort()
 			return
 		}
-
-		// Пользователь - администратор, продолжаем
 		c.Next()
 	}
 }
