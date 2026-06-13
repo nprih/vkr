@@ -81,8 +81,8 @@ func PostLoginHandler(c *gin.Context) {
 		})
 	} else {
 		log.Println("Не верный пароль")
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Пользователь с указанным логин/паролем не найден",
+		c.JSON(http.StatusOK, gin.H{
+			"fail": "Пользователь с указанным логин/паролем не найден",
 		})
 	}
 }

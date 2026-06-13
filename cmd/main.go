@@ -11,13 +11,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const Port = 8085
+const port = 8085
+
+const sessionSecret = "Xqg1j1tmGupISrzeTbzTb6DsvZLscOZ5"
+const sessionLifetime = 60 * 60 * 1
+const sessionName = "userSession"
 
 func main() {
 	router := gin.Default()
 
-	store := cookie.NewStore([]byte("super-secret-key"))
-	router.Use(sessions.Sessions("mysession", store))
+	store := cookie.NewStore([]byte(sessionSecret))
+	store.Options(sessions.Options{MaxAge: sessionLifetime})
+
+	router.Use(sessions.Sessions(sessionName, store))
 
 	router.Static("/web", "web")
 
@@ -42,5 +48,5 @@ func main() {
 		admin.GET("/admin", handler.GetAdminHandler)
 	}
 
-	router.Run(":" + strconv.Itoa(Port))
+	router.Run(":" + strconv.Itoa(port))
 }
