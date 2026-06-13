@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html/template"
 	"strconv"
 	"vkr/internal/handler"
 	"vkr/internal/service"
@@ -19,23 +20,22 @@ func main() {
 	router.Use(sessions.Sessions("mysession", store))
 
 	router.Static("/web", "web")
-	router.LoadHTMLGlob("templates/*")
+
+	tmpl := template.Must(template.ParseGlob("templates/*.html"))
+	tmpl = template.Must(tmpl.ParseGlob("templates/basic/*.html"))
+	router.SetHTMLTemplate(tmpl)
 
 	router.GET("/", handler.IndexHandler)
-
 	router.GET("/login", handler.GetLoginHandler)
 	router.POST("/login", handler.PostLoginHandler)
-
 	router.GET("/register", handler.GetRegisterHandler)
 	router.POST("/register", handler.PostRegisterHandler)
-
 	auth := router.Group("/")
 	auth.Use(service.AuthRequired())
 	{
 		auth.POST("/logout", handler.PostLogoutHandler)
 		auth.GET("/profile", handler.GetProfileHandler)
 	}
-
 	admin := router.Group("/")
 	admin.Use(service.AdminRequired())
 	{
