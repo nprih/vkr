@@ -77,6 +77,7 @@ function login(action){
     if (action === 'click' || action === 'keydown') {
         if (post.login && post.password) {
             sendPost(post, '/login')
+            loginPassword.val('')
         } else {
             alert("Все поля должны быть заполнены")
         }
@@ -92,6 +93,9 @@ function sendPost(post, url) {
         dataType: 'json',
         async: false,
         success: function(data) {
+            if (data.fail){
+                alert(data.fail)
+            }
             if (data.redirect){
                 window.location.replace(baseUrl + data.redirect)
             }

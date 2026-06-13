@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"vkr/internal/db"
@@ -50,9 +51,7 @@ func IndexHandler(c *gin.Context) {
 }
 
 func GetLoginHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, "login.html", gin.H{
-		"title": "Login website",
-	})
+	c.HTML(http.StatusOK, "login.html", gin.H{})
 }
 
 func PostLoginHandler(c *gin.Context) {
@@ -66,6 +65,9 @@ func PostLoginHandler(c *gin.Context) {
 	user, err := db.GetUserByLogin(req.Login)
 	if err != nil {
 		log.Printf("Пользователь %s не найден", req.Login)
+		c.JSON(http.StatusOK, gin.H{
+			"fail": "Пользователь с указанным логин/паролем не найден",
+		})
 		return
 	}
 	if service.CheckPassword(req.Password, user.Password) {
@@ -74,21 +76,19 @@ func PostLoginHandler(c *gin.Context) {
 		service.SetSession(c, user)
 
 		c.JSON(http.StatusOK, gin.H{
-			"message":  "Login successful",
+			"message":  fmt.Sprintf("Пользователь %s авторизован", req.Login),
 			"redirect": "/",
 		})
 	} else {
 		log.Println("Не верный пароль")
 		c.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Invalid credentials",
+			"message": "Пользователь с указанным логин/паролем не найден",
 		})
 	}
 }
 
 func GetRegisterHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, "register.html", gin.H{
-		"title": "Main website",
-	})
+	c.HTML(http.StatusOK, "register.html", gin.H{})
 }
 
 func PostRegisterHandler(c *gin.Context) {
@@ -144,7 +144,7 @@ func PostLogoutHandler(c *gin.Context) {
 	service.UnsetSession(c)
 
 	c.JSON(http.StatusOK, gin.H{
-		"message":  "Logout successful",
+		//"message":  "Logout successful",
 		"redirect": "/",
 	})
 }
