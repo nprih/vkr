@@ -2,8 +2,11 @@ package service
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/alexedwards/argon2id"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 )
 
 func HashPassword(password string) (string, error) {
@@ -20,4 +23,32 @@ func CheckPassword(password string, hash string) bool {
 		log.Fatal(err)
 	}
 	return match
+}
+
+func AuthRequired() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		user := session.Get("user_login")
+		if user == nil {
+			c.Redirect(http.StatusFound, "/login")
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
+}
+
+func AdminRequired() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		isAdmin, ok := session.Get("is_admin").(bool)
+		if !ok || !isAdmin {
+			c.HTML(http.StatusForbidden, "error.html", gin.H{
+				"error": "Доступ запрещен",
+			})
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
 }
