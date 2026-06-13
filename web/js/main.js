@@ -21,6 +21,12 @@ switch (pathname) {
     case "/register":
         selected = $('.nav-link:contains("Регистрация")');
         break;
+    case "/profile":
+        selected = $('.nav-link:contains("Профиль")');
+        break;
+    case "/admin":
+        selected = $('.nav-link:contains("Админ-панель")');
+        break;
 }
 selected.addClass('active');
 
