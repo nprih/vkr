@@ -28,9 +28,9 @@ func CheckPassword(password string, hash string) bool {
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
-		user := session.Get("user_login")
+		user := session.Get("is_login")
 		if user == nil {
-			c.Redirect(http.StatusFound, "/login")
+			c.Redirect(http.StatusFound, "/")
 			c.Abort()
 			return
 		}
@@ -46,6 +46,7 @@ func AdminRequired() gin.HandlerFunc {
 			c.HTML(http.StatusForbidden, "error.html", gin.H{
 				"error": "Доступ запрещен",
 			})
+			c.Redirect(http.StatusFound, "/")
 			c.Abort()
 			return
 		}

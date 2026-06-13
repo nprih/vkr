@@ -31,10 +31,11 @@ func main() {
 
 	// Группа маршрутов для авторизованных пользователей
 	auth := router.Group("/")
-	//auth.Use(service.AuthRequired())
-	//{
-	auth.POST("/logout", handler.PostLogoutHandler)
-	//}
+	auth.Use(service.AuthRequired())
+	{
+		auth.POST("/logout", handler.PostLogoutHandler)
+		auth.GET("/profile", handler.GetProfileHandler)
+	}
 
 	// Группа маршрутов только для администраторов
 	admin := router.Group("/admin")

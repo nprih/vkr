@@ -1,0 +1,27 @@
+{{template "head.html" .}}
+{{template "header.html" .}}
+
+<section class="page" id="page-profile">
+    <h1 class="page-title">👤 Мой профиль</h1>
+    <p class="page-subtitle" id="profileUsernameDisplay"></p>
+
+    <!-- Зона загрузки -->
+    <div class="upload-zone" onclick="document.getElementById('fileInput').click()" id="uploadZone">
+        <div class="upload-icon">📤</div>
+        <strong>Нажмите, чтобы загрузить фотографию</strong>
+        <p style="font-size:0.85rem;color:var(--text-secondary);">JPEG, PNG, GIF, WebP — до 10 МБ</p>
+        <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)">
+    </div>
+    <div id="uploadFeedback" style="margin-bottom:16px;"></div>
+
+    <h2 style="margin-bottom:12px;font-size:1.2rem;">Мои фотографии</h2>
+    <div class="photo-grid" id="userPhotosGrid">
+        <div class="empty-state">
+            <div class="empty-state-icon">📸</div>
+            <h3>У вас пока нет фотографий</h3>
+            <p>Загрузите первую фотографию через форму выше</p>
+        </div>
+    </div>
+</section>
+
+{{template "foo.html" .}}
