@@ -36,12 +36,14 @@ func main() {
 	router.POST("/login", handler.PostLoginHandler)
 	router.GET("/register", handler.GetRegisterHandler)
 	router.POST("/register", handler.PostRegisterHandler)
+
 	auth := router.Group("/")
 	auth.Use(service.AuthRequired())
 	{
 		auth.POST("/logout", handler.PostLogoutHandler)
 		auth.GET("/profile", handler.GetProfileHandler)
 	}
+
 	admin := router.Group("/")
 	admin.Use(service.AdminRequired())
 	{
