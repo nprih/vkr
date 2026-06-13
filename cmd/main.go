@@ -36,7 +36,7 @@ func main() {
 		auth.GET("/profile", handler.GetProfileHandler)
 	}
 
-	admin := router.Group("/admin")
+	admin := router.Group("/")
 	admin.Use(service.AdminRequired())
 	{
 		admin.GET("/admin", handler.GetAdminHandler)

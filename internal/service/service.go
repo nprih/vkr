@@ -58,7 +58,6 @@ func AuthRequired() gin.HandlerFunc {
 
 func AdminRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		log.Println("AdminRequired middleware вызван")
 		session := sessions.Default(c)
 		isAdmin, ok := session.Get("is_admin").(bool)
 		if !ok || !isAdmin {
