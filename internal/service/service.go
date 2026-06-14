@@ -1,14 +1,46 @@
 package service
 
 import (
+	"fmt"
+	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
+	"time"
 	"vkr/internal/db"
 
 	"github.com/alexedwards/argon2id"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
+
+const (
+	MaxImageSize  = 10 * 1024 * 1024 // 10 MB
+	BaseUploadDir = "uploads/users"
+)
+
+// AllowedImageTypes - допустимые типы изображений
+var AllowedImageTypes = map[string]bool{
+	"image/jpeg": true,
+	"image/jpg":  true,
+	"image/png":  true,
+	"image/gif":  true,
+	"image/webp": true,
+}
+
+// UploadedImage - результат загрузки
+type UploadedImage struct {
+	Filename     string
+	OriginalName string
+	FilePath     string
+	FileSize     int64
+	MimeType     string
+	URL          string
+}
 
 func HashPassword(password string) (string, error) {
 	hash, err := argon2id.CreateHash(password, argon2id.DefaultParams)
@@ -72,4 +104,100 @@ func AdminRequired() gin.HandlerFunc {
 		}
 		c.Next()
 	}
+}
+
+func SaveUserImage(fileHeader *multipart.FileHeader, userID int64) (*UploadedImage, error) {
+	if fileHeader.Size > MaxImageSize {
+		return nil, fmt.Errorf("файл слишком большой. Максимальный размер: %d MB", MaxImageSize/1024/1024)
+	}
+
+	file, err := fileHeader.Open()
+	if err != nil {
+		return nil, fmt.Errorf("не удалось открыть файл: %v", err)
+	}
+	defer file.Close()
+
+	buffer := make([]byte, 512)
+	_, err = file.Read(buffer)
+	if err != nil {
+		return nil, fmt.Errorf("ошибка чтения файла: %v", err)
+	}
+
+	mimeType := http.DetectContentType(buffer)
+	if !AllowedImageTypes[mimeType] {
+		return nil, fmt.Errorf("неподдерживаемый тип файла. Разрешены: JPEG, PNG, GIF, WEBP")
+	}
+
+	file.Seek(0, 0)
+
+	userDir := filepath.Join(BaseUploadDir, fmt.Sprintf("%d", userID))
+	if err := os.MkdirAll(userDir, 0755); err != nil {
+		return nil, fmt.Errorf("не удалось создать директорию: %v", err)
+	}
+
+	// 5. Генерируем уникальное имя файла
+	ext := strings.ToLower(filepath.Ext(fileHeader.Filename))
+	if ext == "" {
+		// Определяем расширение по MIME
+		switch mimeType {
+		case "image/jpeg", "image/jpg":
+			ext = ".jpg"
+		case "image/png":
+			ext = ".png"
+		case "image/gif":
+			ext = ".gif"
+		case "image/webp":
+			ext = ".webp"
+		}
+	}
+
+	timestamp := time.Now().Unix()
+	uniqueID := uuid.New().String()[:8]
+	filename := fmt.Sprintf("%d_%s%s", timestamp, uniqueID, ext)
+
+	filePath := filepath.Join(userDir, filename)
+	webPath := "/" + filepath.ToSlash(filePath) // для URL
+
+	dst, err := os.Create(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("не удалось создать файл: %v", err)
+	}
+	defer dst.Close()
+
+	written, err := io.Copy(dst, file)
+	if err != nil {
+		return nil, fmt.Errorf("ошибка сохранения файла: %v", err)
+	}
+
+	log.Printf("Изображение сохранено: %s (пользователь %d, размер %d байт)", filePath, userID, written)
+
+	return &UploadedImage{
+		Filename:     filename,
+		OriginalName: fileHeader.Filename,
+		FilePath:     filePath,
+		FileSize:     written,
+		MimeType:     mimeType,
+		URL:          webPath,
+	}, nil
+}
+
+// DeleteUserImage - удаляет файл изображения
+func DeleteUserImage(filePath string) error {
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		return nil // Файла нет
+	}
+
+	err := os.Remove(filePath)
+	if err != nil {
+		log.Printf("Ошибка удаления файла %s: %v", filePath, err)
+		return err
+	}
+
+	log.Printf("Файл изображения удален: %s", filePath)
+	return nil
+}
+
+// GetUserUploadDir - возвращает директорию загрузок пользователя
+func GetUserUploadDir(userID int) string {
+	return filepath.Join(BaseUploadDir, fmt.Sprintf("%d", userID))
 }

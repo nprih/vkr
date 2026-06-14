@@ -26,6 +26,7 @@ func main() {
 	router.Use(sessions.Sessions(sessionName, store))
 
 	router.Static("/web", "web")
+	router.Static("/uploads", "./uploads")
 
 	tmpl := template.Must(template.ParseGlob("templates/*.html"))
 	tmpl = template.Must(tmpl.ParseGlob("templates/basic/*.html"))
@@ -42,6 +43,7 @@ func main() {
 	{
 		auth.POST("/logout", handler.PostLogoutHandler)
 		auth.GET("/profile", handler.GetProfileHandler)
+		auth.POST("/upload", handler.PostUploadHandler)
 	}
 
 	admin := router.Group("/")

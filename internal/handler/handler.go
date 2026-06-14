@@ -151,9 +151,93 @@ func PostLogoutHandler(c *gin.Context) {
 
 func GetProfileHandler(c *gin.Context) {
 	setValue(c)
+	if !value.IsLogin || value.Login == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
+		return
+	}
+
+	user, err := db.GetUserByLogin(value.Login)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Пользователь не найден",
+		})
+		return
+	}
+	images, err := db.GetUserImages(user.Id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+	}
+	type Img struct {
+		Id     int64
+		Url    string
+		Author string
+	}
+	urls := make([]Img, 0)
+	for _, image := range images {
+		urls = append(urls, Img{
+			Id:     image.Id,
+			Url:    image.FilePath,
+			Author: "",
+		})
+	}
+	log.Println(urls)
 	c.HTML(http.StatusOK, "profile.html", gin.H{
 		"login":    value.Login,
 		"is_login": value.IsLogin,
 		"is_admin": value.IsAdmin,
+		"images":   urls,
+	})
+}
+
+func PostUploadHandler(c *gin.Context) {
+	setValue(c)
+	if !value.IsLogin || value.Login == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
+		return
+	}
+
+	user, err := db.GetUserByLogin(value.Login)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Пользователь не найден",
+		})
+		return
+	}
+
+	file, err := c.FormFile("image")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Файл не загружен"})
+		return
+	}
+
+	uploaded, err := service.SaveUserImage(file, user.Id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	image := &db.Image{
+		UserId:       user.Id,
+		Filename:     uploaded.Filename,
+		OriginalName: uploaded.OriginalName,
+		FilePath:     uploaded.FilePath,
+		FileSize:     int(uploaded.FileSize),
+		MimeType:     uploaded.MimeType,
+		Description:  "",
+	}
+
+	if err := db.SaveImageInfo(image); err != nil {
+		service.DeleteUserImage(uploaded.FilePath)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось сохранить информацию об изображении"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":   "Изображение успешно загружено",
+		"image_id":  image.Id,
+		"image_url": uploaded.URL,
+		"redirect":  "/gallery",
 	})
 }

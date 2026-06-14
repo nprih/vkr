@@ -84,6 +84,43 @@ function login(action){
     }
 }
 
+$('#fileInput').on('change', function () {
+    const fileInput = $(this)[0];
+    const file = fileInput.files[0];
+    if (!file) {
+        console.warn('Выберите файл');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file, file.name); // поле 'image' будет ключом на сервере
+    // console.log(file)
+    $.ajax({
+        url: '/upload',
+        type: 'POST',
+        data: formData,
+        processData: false, // критично: не превращать FormData в строку
+        contentType: false, // критично: не ставить application/x-www-form-urlencoded
+        success: function(res) {
+            console.log('Успех:', res);
+        },
+        error: function(xhr, status, err) {
+            console.error('Ошибка:', status, err);
+        }
+    });
+});
+
+$('.photo-card').on('click', function () {
+    document.getElementById('lightboxImg').src = $(this).children('img').attr('src');
+    document.getElementById('lightbox').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+})
+
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+    document.body.style.overflow = '';
+}
+
 function sendPost(post, url) {
     $.ajax({
         url: url,
