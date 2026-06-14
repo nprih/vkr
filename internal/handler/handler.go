@@ -179,7 +179,7 @@ func GetProfileHandler(c *gin.Context) {
 		urls = append(urls, Img{
 			Id:     image.Id,
 			Url:    image.FilePath,
-			Author: "",
+			Author: image.Author,
 		})
 	}
 	log.Println(urls)

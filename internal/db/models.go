@@ -20,3 +20,9 @@ type Image struct {
 	Description  string
 	CreatedAt    time.Time
 }
+
+type UserImage struct {
+	Id       int64
+	FilePath string
+	Author   string
+}
