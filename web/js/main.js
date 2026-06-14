@@ -103,6 +103,7 @@ $('#fileInput').on('change', function () {
         contentType: false, // критично: не ставить application/x-www-form-urlencoded
         success: function(res) {
             console.log('Успех:', res);
+            window.location.replace(baseUrl + '/profile')
         },
         error: function(xhr, status, err) {
             console.error('Ошибка:', status, err);
