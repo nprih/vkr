@@ -86,6 +86,36 @@ func SaveImageInfo(image *Image) error {
 	return err
 }
 
+func GetAllUserImages() ([]UserImage, error) {
+	conn, err := connect()
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	defer conn.Close()
+
+	query := `SELECT ui.id, ui.file_path, u.login author 
+				FROM users u 
+				    INNER JOIN user_images ui ON u.id = ui.user_id 
+				ORDER BY ui.created_at DESC`
+	rows, err := conn.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var images []UserImage
+	for rows.Next() {
+		var img UserImage
+		err := rows.Scan(&img.Id, &img.FilePath, &img.Author)
+		if err != nil {
+			return nil, err
+		}
+		images = append(images, img)
+	}
+	return images, nil
+}
+
 func GetUserImages(userId int64) ([]UserImage, error) {
 	conn, err := connect()
 	if err != nil {
@@ -97,7 +127,8 @@ func GetUserImages(userId int64) ([]UserImage, error) {
 	query := `SELECT ui.id, ui.file_path, u.login author 
 				FROM users u 
 				    INNER JOIN user_images ui ON u.id = ui.user_id 
-				WHERE u.id = ?`
+				WHERE u.id = ? 
+				ORDER BY ui.created_at DESC`
 	rows, err := conn.Query(query, userId)
 	if err != nil {
 		return nil, err

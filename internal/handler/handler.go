@@ -43,10 +43,32 @@ func setValue(c *gin.Context) {
 
 func IndexHandler(c *gin.Context) {
 	setValue(c)
+
+	images, err := db.GetAllUserImages()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+	}
+	type Img struct {
+		Id     int64
+		Url    string
+		Author string
+	}
+	urls := make([]Img, 0)
+	for _, image := range images {
+		urls = append(urls, Img{
+			Id:     image.Id,
+			Url:    image.FilePath,
+			Author: image.Author,
+		})
+	}
+
 	c.HTML(http.StatusOK, "main.html", gin.H{
 		"login":    value.Login,
 		"is_login": value.IsLogin,
 		"is_admin": value.IsAdmin,
+		"images":   urls,
 	})
 }
 
@@ -182,7 +204,6 @@ func GetProfileHandler(c *gin.Context) {
 			Author: image.Author,
 		})
 	}
-	log.Println(urls)
 	c.HTML(http.StatusOK, "profile.html", gin.H{
 		"login":    value.Login,
 		"is_login": value.IsLogin,

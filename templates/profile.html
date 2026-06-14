@@ -16,13 +16,12 @@
 
     <h2 style="margin-bottom:12px;font-size:1.2rem;">Мои фотографии</h2>
     <div class="photo-grid" id="userPhotosGrid">
-
         {{if .images}}
             {{range .images}}
                 <div class="photo-card" id="{{ .Id}}" title="Нажмите для просмотра">
                     <img class="photo-card-img" src="{{ .Url}}" alt="Фото" loading="lazy">
                     <div class="photo-card-body">
-                        <span class="photo-card-author">{{ .Author}}</span>
+                        <span class="photo-card-author">Пользователь: {{ .Author}}</span>
                     </div>
                 </div>
             {{end}}
