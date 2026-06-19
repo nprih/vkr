@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"vkr/internal/repository"
 
 	"github.com/joho/godotenv"
 )
@@ -27,4 +28,9 @@ func Init() {
 	SessionSecret = os.Getenv("SESSION_SECRET")
 	SessionLifetime = os.Getenv("SESSION_LIFETIME")
 	SessionName = os.Getenv("SESSION_NAME")
+
+	dbPath := "./volumes/photo_bank"
+	if err := repository.InitDB(dbPath); err != nil {
+		log.Fatalf("Не удалось инициализировать БД: %v", err)
+	}
 }

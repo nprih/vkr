@@ -4,34 +4,15 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"vkr/internal/repository"
 
 	_ "modernc.org/sqlite"
 )
 
-func connect() (*sql.DB, error) {
-	db, err := sql.Open("sqlite", "volumes/photo_bank")
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-
-	err = db.Ping()
-	if err != nil {
-		log.Println("ping db:", err)
-		return nil, err
-	}
-	return db, nil
-}
-
 func Register(login string, password string) (message string, err error) {
-	conn, err := connect()
-	if err != nil {
-		log.Println(err)
-		return "", err
-	}
-	defer conn.Close()
+	db := repository.GetDB()
 
-	_, err = conn.Exec("INSERT INTO users (login, password) VALUES ($1, $2)", login, password)
+	_, err = db.Exec("INSERT INTO users (login, password) VALUES ($1, $2)", login, password)
 	if err != nil {
 		log.Println(err)
 		return "", err
@@ -40,15 +21,10 @@ func Register(login string, password string) (message string, err error) {
 }
 
 func GetUserByLogin(login string) (*User, error) {
-	conn, err := connect()
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-	defer conn.Close()
+	db := repository.GetDB()
 
 	var user User
-	err = conn.QueryRow("SELECT * FROM users WHERE login = $1", login).
+	err := db.QueryRow("SELECT * FROM users WHERE login = $1", login).
 		Scan(&user.Id, &user.Login, &user.Password, &user.Is_admin)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -61,18 +37,13 @@ func GetUserByLogin(login string) (*User, error) {
 }
 
 func SaveImageInfo(image *Image) error {
-	conn, err := connect()
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	defer conn.Close()
+	db := repository.GetDB()
 
 	query := `
         INSERT INTO user_images (user_id, filename, original_name, file_path, file_size, mime_type, description)
         VALUES (?, ?, ?, ?, ?, ?, ?)
     `
-	result, err := conn.Exec(query,
+	result, err := db.Exec(query,
 		image.UserId, image.Filename, image.OriginalName,
 		image.FilePath, image.FileSize, image.MimeType, image.Description)
 	if err != nil {
@@ -87,18 +58,13 @@ func SaveImageInfo(image *Image) error {
 }
 
 func GetAllUserImages() ([]UserImage, error) {
-	conn, err := connect()
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-	defer conn.Close()
+	db := repository.GetDB()
 
 	query := `SELECT ui.id, ui.file_path, u.login author 
 				FROM users u 
 				    INNER JOIN user_images ui ON u.id = ui.user_id 
 				ORDER BY ui.created_at DESC`
-	rows, err := conn.Query(query)
+	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
 	}
@@ -117,19 +83,14 @@ func GetAllUserImages() ([]UserImage, error) {
 }
 
 func GetUserImages(userId int64) ([]UserImage, error) {
-	conn, err := connect()
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-	defer conn.Close()
+	db := repository.GetDB()
 
 	query := `SELECT ui.id, ui.file_path, u.login author 
 				FROM users u 
 				    INNER JOIN user_images ui ON u.id = ui.user_id 
 				WHERE u.id = ? 
 				ORDER BY ui.created_at DESC`
-	rows, err := conn.Query(query, userId)
+	rows, err := db.Query(query, userId)
 	if err != nil {
 		return nil, err
 	}

@@ -2,6 +2,8 @@ module vkr
 
 go 1.26.1
 
+require github.com/mattn/go-sqlite3 v1.14.22
+
 require (
 	github.com/alexedwards/argon2id v1.0.0 // indirect
 	github.com/bytedance/gopkg v0.1.4 // indirect

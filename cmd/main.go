@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"vkr/internal/config"
 	"vkr/internal/handler"
+	"vkr/internal/repository"
 	"vkr/internal/service"
 
 	"github.com/gin-contrib/sessions"
@@ -13,8 +14,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func main() {
+func init() {
 	config.Init()
+}
+
+func main() {
+	defer repository.CloseDB()
 
 	router := gin.Default()
 
