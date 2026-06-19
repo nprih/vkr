@@ -22,7 +22,8 @@ type Image struct {
 }
 
 type UserImage struct {
-	Id       int64
-	FilePath string
-	Author   string
+	Id        int64
+	FilePath  string
+	Author    string
+	CreatedAt time.Time
 }

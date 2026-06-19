@@ -166,7 +166,6 @@ func PostLogoutHandler(c *gin.Context) {
 	service.UnsetSession(c)
 
 	c.JSON(http.StatusOK, gin.H{
-		//"message":  "Logout successful",
 		"redirect": "/",
 	})
 }
@@ -192,18 +191,21 @@ func GetProfileHandler(c *gin.Context) {
 		})
 	}
 	type Img struct {
-		Id     int64
-		Url    string
-		Author string
+		Id        int64
+		Url       string
+		Author    string
+		CreatedAt string
 	}
 	urls := make([]Img, 0)
 	for _, image := range images {
 		urls = append(urls, Img{
-			Id:     image.Id,
-			Url:    image.FilePath,
-			Author: image.Author,
+			Id:        image.Id,
+			Url:       image.FilePath,
+			Author:    image.Author,
+			CreatedAt: image.CreatedAt.Format("02.01.2006 15:04:05"),
 		})
 	}
+	log.Println(urls)
 	c.HTML(http.StatusOK, "profile.html", gin.H{
 		"login":    value.Login,
 		"is_login": value.IsLogin,

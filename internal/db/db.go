@@ -85,7 +85,7 @@ func GetAllUserImages() ([]UserImage, error) {
 func GetUserImages(userId int64) ([]UserImage, error) {
 	db := repository.GetDB()
 
-	query := `SELECT ui.id, ui.file_path, u.login author 
+	query := `SELECT ui.id, ui.file_path, ui.created_at, u.login author 
 				FROM users u 
 				    INNER JOIN user_images ui ON u.id = ui.user_id 
 				WHERE u.id = ? 
@@ -99,7 +99,7 @@ func GetUserImages(userId int64) ([]UserImage, error) {
 	var images []UserImage
 	for rows.Next() {
 		var img UserImage
-		err := rows.Scan(&img.Id, &img.FilePath, &img.Author)
+		err := rows.Scan(&img.Id, &img.FilePath, &img.CreatedAt, &img.Author)
 		if err != nil {
 			return nil, err
 		}
