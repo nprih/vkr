@@ -285,6 +285,6 @@ func GetImagesHandler(c *gin.Context) {
 
 func DeleteImagesHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"message": "DeleteImagesHandler",
+		"message": "DeleteImagesHandler ",
 	})
 }
