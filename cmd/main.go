@@ -41,16 +41,16 @@ func main() {
 
 	router.GET("/", handler.IndexHandler)
 	router.GET("/login", handler.GetLoginHandler)
-	router.POST("/login", handler.PostLoginHandler)
 	router.GET("/register", handler.GetRegisterHandler)
+	router.POST("/login", handler.PostLoginHandler)
 	router.POST("/register", handler.PostRegisterHandler)
 
 	auth := router.Group("/")
 	auth.Use(service.AuthRequired())
 	{
-		auth.POST("/logout", handler.PostLogoutHandler)
 		auth.GET("/profile", handler.GetProfileHandler)
-		auth.GET("/images/:user_id", handler.GetImagesHandler)
+		auth.GET("/images", handler.GetImagesHandler)
+		auth.POST("/logout", handler.PostLogoutHandler)
 		auth.POST("/upload", handler.PostUploadHandler)
 	}
 
