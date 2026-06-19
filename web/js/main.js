@@ -88,7 +88,26 @@ $('#fileInput').on('change', function () {
 
 /** Вызов модалки для просмотра картинки */
 $('.photo-card').on('click', function () {
-    document.getElementById('lightboxImg').src = $(this).children('img').attr('src');
-    document.getElementById('lightbox').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+    viewImage($(this).children('img').attr('src'))
+})
+
+/** Вызов модалки для просмотра картинки */
+$('.thumb-mini').on('click', function () {
+    viewImage($(this).attr('src'))
+})
+
+$('.delete_image').on('click', function () {
+    console.log($(this).attr('id'))
+
+    $.ajax({
+        url: '/images',
+        type: 'DELETE',
+        success: function(response) {
+            console.log('Удалено:', response);
+            // тут обновить UI, например удалить строку из таблицы
+        },
+        error: function(xhr, status, error) {
+            console.error('Ошибка:', error);
+        }
+    });
 })

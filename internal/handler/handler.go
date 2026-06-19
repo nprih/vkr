@@ -282,3 +282,9 @@ func GetImagesHandler(c *gin.Context) {
 		"images": formatImages(images),
 	})
 }
+
+func DeleteImagesHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message": "DeleteImagesHandler",
+	})
+}

@@ -23,11 +23,11 @@
                 </thead>
                 <tbody id="adminPhotosBody">
                     {{range .values.images}}
-                        <tr>
+                        <tr id="{{ .Id}}">
                             <td id="{{ .Id}}" title="Нажмите для просмотра"><img class="thumb-mini" src="{{ .Url}}" alt="миниатюра" style="cursor:pointer;"></td>
                             <td>{{ .Author}}</td>
                             <td>{{ .CreatedAt}}</td>
-                            <td><button class="btn btn-danger btn-sm">🗑 Удалить</button></td>
+                            <td><button class="btn btn-danger btn-sm delete_image" id="{{ .Id}}">🗑 Удалить</button></td>
                         </tr>
                     {{end}}
                 </tbody>

@@ -28,11 +28,15 @@ function login(action){
 function getImages() {
     $.get(baseUrl + '/images', function(data) {
         if (data.images) {
-            // if (data.images.length !== 0) {
-                refreshImages(data.images)
-            // }
+            refreshImages(data.images)
         }
     })
+}
+
+function viewImage(src) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightbox').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
 
 function closeLightbox() {
