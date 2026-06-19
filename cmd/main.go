@@ -50,6 +50,7 @@ func main() {
 	{
 		auth.POST("/logout", handler.PostLogoutHandler)
 		auth.GET("/profile", handler.GetProfileHandler)
+		auth.GET("/images/:user_id", handler.GetImagesHandler)
 		auth.POST("/upload", handler.PostUploadHandler)
 	}
 

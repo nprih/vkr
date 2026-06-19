@@ -262,3 +262,7 @@ func PostUploadHandler(c *gin.Context) {
 		"redirect":  "/gallery",
 	})
 }
+
+func GetImagesHandler(c *gin.Context) {
+	log.Println("GetImagesHandler")
+}

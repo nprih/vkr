@@ -93,17 +93,16 @@ $('#fileInput').on('change', function () {
     }
 
     const formData = new FormData();
-    formData.append('image', file, file.name); // поле 'image' будет ключом на сервере
-    // console.log(file)
+    formData.append('image', file, file.name);
     $.ajax({
         url: '/upload',
         type: 'POST',
         data: formData,
-        processData: false, // критично: не превращать FormData в строку
-        contentType: false, // критично: не ставить application/x-www-form-urlencoded
+        processData: false,
+        contentType: false,
         success: function(res) {
             console.log('Успех:', res);
-            window.location.replace(baseUrl + '/profile')
+            getImages()
         },
         error: function(xhr, status, err) {
             console.error('Ошибка:', status, err);
@@ -116,6 +115,10 @@ $('.photo-card').on('click', function () {
     document.getElementById('lightbox').style.display = 'flex';
     document.body.style.overflow = 'hidden';
 })
+
+function getImages() {
+    console.log('getImages')
+}
 
 function closeLightbox() {
     document.getElementById('lightbox').style.display = 'none';
