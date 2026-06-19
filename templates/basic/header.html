@@ -12,8 +12,12 @@
 
             {{if .is_login}}
                 <a href="/profile"><button class="nav-link">👤 Профиль</button></a>
+                {{if .is_admin}}
+                    <span class="user-badge">admin <span class="admin-badge">админ</span></span>
+                {{else}}
+                    <span class="user-badge">{{ .login}}</span>
+                {{end}}
                 <a href="#"><button class="nav-link danger logout">🚪 Выйти</button></a>
-                <span class="user-badge">{{ .login}}</span>
             {{end}}
 
             {{if not .is_login}}
