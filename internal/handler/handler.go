@@ -25,6 +25,13 @@ type Val struct {
 	IsAdmin bool
 }
 
+type Img struct {
+	Id        int64
+	Url       string
+	Author    string
+	CreatedAt string
+}
+
 func setValue(c *gin.Context) {
 	session := sessions.Default(c)
 	login, ok := session.Get("login").(string)
@@ -41,6 +48,27 @@ func setValue(c *gin.Context) {
 	}
 }
 
+func formatValues(images []db.UserImage) map[string]any {
+	return map[string]any{
+		"login":    value.Login,
+		"is_login": value.IsLogin,
+		"is_admin": value.IsAdmin,
+		"images":   formatImages(images),
+	}
+}
+
+func formatImages(images []db.UserImage) (urls []Img) {
+	for _, image := range images {
+		urls = append(urls, Img{
+			Id:        image.Id,
+			Url:       image.FilePath,
+			Author:    image.Author,
+			CreatedAt: image.CreatedAt.Format("02.01.2006 15:04:05"),
+		})
+	}
+	return urls
+}
+
 func IndexHandler(c *gin.Context) {
 	setValue(c)
 
@@ -50,25 +78,8 @@ func IndexHandler(c *gin.Context) {
 			"error": err.Error(),
 		})
 	}
-	type Img struct {
-		Id     int64
-		Url    string
-		Author string
-	}
-	urls := make([]Img, 0)
-	for _, image := range images {
-		urls = append(urls, Img{
-			Id:     image.Id,
-			Url:    image.FilePath,
-			Author: image.Author,
-		})
-	}
-
 	c.HTML(http.StatusOK, "main.html", gin.H{
-		"login":    value.Login,
-		"is_login": value.IsLogin,
-		"is_admin": value.IsAdmin,
-		"images":   urls,
+		"values": formatValues(images),
 	})
 }
 
@@ -148,9 +159,7 @@ func PostRegisterHandler(c *gin.Context) {
 func GetAdminHandler(c *gin.Context) {
 	setValue(c)
 	c.HTML(http.StatusOK, "admin.html", gin.H{
-		"login":    value.Login,
-		"is_login": value.IsLogin,
-		"is_admin": value.IsAdmin,
+		"values": formatValues(nil),
 	})
 }
 
@@ -190,27 +199,9 @@ func GetProfileHandler(c *gin.Context) {
 			"error": err.Error(),
 		})
 	}
-	type Img struct {
-		Id        int64
-		Url       string
-		Author    string
-		CreatedAt string
-	}
-	urls := make([]Img, 0)
-	for _, image := range images {
-		urls = append(urls, Img{
-			Id:        image.Id,
-			Url:       image.FilePath,
-			Author:    image.Author,
-			CreatedAt: image.CreatedAt.Format("02.01.2006 15:04:05"),
-		})
-	}
-	log.Println(urls)
+
 	c.HTML(http.StatusOK, "profile.html", gin.H{
-		"login":    value.Login,
-		"is_login": value.IsLogin,
-		"is_admin": value.IsAdmin,
-		"images":   urls,
+		"values": formatValues(images),
 	})
 }
 

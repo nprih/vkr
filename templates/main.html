@@ -7,8 +7,8 @@
         <h1 class="page-title">🖼️ Галерея</h1>
         <p class="page-subtitle">Фотографии, которые загрузили пользователи</p>
         <div class="photo-grid" id="userPhotosGrid">
-            {{if .images}}
-                {{range .images}}
+            {{if .values.images}}
+                {{range .values.images}}
                     <div class="photo-card" id="{{ .Id}}" title="Нажмите для просмотра">
                         <img class="photo-card-img" src="{{ .Url}}" alt="Фото" loading="lazy">
                         <div class="photo-card-body">
