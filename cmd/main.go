@@ -2,7 +2,9 @@ package main
 
 import (
 	"html/template"
+	"log"
 	"strconv"
+	"vkr/internal/config"
 	"vkr/internal/handler"
 	"vkr/internal/service"
 
@@ -11,19 +13,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const port = 8085
-
-const sessionSecret = "Xqg1j1tmGupISrzeTbzTb6DsvZLscOZ5"
-const sessionLifetime = 60 * 60 * 1
-const sessionName = "userSession"
-
 func main() {
+	config.Init()
+
 	router := gin.Default()
 
-	store := cookie.NewStore([]byte(sessionSecret))
-	store.Options(sessions.Options{MaxAge: sessionLifetime})
+	store := cookie.NewStore([]byte(config.SessionSecret))
+	lifetime, err := strconv.Atoi(config.SessionLifetime)
+	if err != nil {
+		log.Println("Warning: session lifetime not a number")
+	}
+	store.Options(sessions.Options{MaxAge: lifetime})
 
-	router.Use(sessions.Sessions(sessionName, store))
+	router.Use(sessions.Sessions(config.SessionName, store))
 
 	router.Static("/web", "web")
 	router.Static("/uploads", "./uploads")
@@ -52,5 +54,5 @@ func main() {
 		admin.GET("/admin", handler.GetAdminHandler)
 	}
 
-	router.Run(":" + strconv.Itoa(port))
+	router.Run(":" + config.Port)
 }
