@@ -26,10 +26,10 @@ type Val struct {
 }
 
 type Img struct {
-	Id        int64
-	Url       string
-	Author    string
-	CreatedAt string
+	Id        int64  `json:"id"`
+	Url       string `json:"url"`
+	Author    string `json:"author"`
+	CreatedAt string `json:"createdAt"`
 }
 
 func setValue(c *gin.Context) {
@@ -257,5 +257,28 @@ func PostUploadHandler(c *gin.Context) {
 }
 
 func GetImagesHandler(c *gin.Context) {
-	log.Println("GetImagesHandler")
+	setValue(c)
+	if !value.IsLogin || value.Login == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
+		return
+	}
+
+	user, err := db.GetUserByLogin(value.Login)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Пользователь не найден",
+		})
+		return
+	}
+
+	images, err := db.GetUserImages(user.Id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"images": formatImages(images),
+	})
 }

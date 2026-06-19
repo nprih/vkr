@@ -16,12 +16,12 @@
 
     <h2 style="margin-bottom:12px;font-size:1.2rem;">Мои фотографии</h2>
     <div class="table-wrapper">
+        {{if .values.images}}
         <table id="adminPhotosTable">
             <thead>
-            <tr><th>Превью</th><th>Автор</th><th>Дата</th><th>Действия</th></tr>
+                <tr><th>Превью</th><th>Автор</th><th>Дата</th><th>Действия</th></tr>
             </thead>
-            {{if .values.images}}
-                <tbody id="adminPhotosBody">
+            <tbody id="adminPhotosBody">
                 {{range .values.images}}
                     <tr>
                         <td id="{{ .Id}}" title="Нажмите для просмотра"><img class="thumb-mini" src="{{ .Url}}" alt="миниатюра" onclick="openLightbox('id_1781456155994_9kbkzyvk1')" style="cursor:pointer;"></td>
@@ -30,15 +30,15 @@
                         <td><button class="btn btn-danger btn-sm" onclick="adminDeletePhoto('id_1781456155994_9kbkzyvk1')">🗑 Удалить</button></td>
                     </tr>
                 {{end}}
-                </tbody>
-            {{else}}
-                <div class="empty-state">
-                    <div class="empty-state-icon">📸</div>
-                    <h3>У вас пока нет фотографий</h3>
-                    <p>Загрузите первую фотографию через форму выше</p>
-                </div>
-            {{end}}
+            </tbody>
         </table>
+        {{else}}
+            <div class="empty-state">
+                <div class="empty-state-icon">📸</div>
+                <h3>У вас пока нет фотографий</h3>
+                <p>Загрузите первую фотографию через форму выше</p>
+            </div>
+        {{end}}
     </div>
 </section>
 

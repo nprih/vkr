@@ -117,7 +117,33 @@ $('.photo-card').on('click', function () {
 })
 
 function getImages() {
-    console.log('getImages')
+    $.get(baseUrl + '/images', function(data) {
+        if (data.images) {
+            if (data.images.length !== 0) {
+                console.log(data.images);
+                let newImages = '<table id="adminPhotosTable">' +
+                    '                       <thead>\n' +
+                    '                           <tr><th>Превью</th><th>Автор</th>' +
+                    '<th>Дата</th><th>Действия</th></tr>\n' +
+                    '                       </thead>\n' +
+                    '                       <tbody id="adminPhotosBody">'
+
+                $.each(data.images, function (index, value) {
+                    newImages += '                    <tr>\n' +
+                        '                        <td id="' + value.id + '" title="Нажмите для просмотра">' +
+                        '<img class="thumb-mini" src="' + value.url + '" alt="миниатюра" ' +
+                        'onclick="openLightbox(\'id_1781456155994_9kbkzyvk1\')" style="cursor:pointer;"></td>\n' +
+                        '                        <td>' + value.author + '</td>\n' +
+                        '                        <td>' + value.createdAt + '</td>\n' +
+                        '                        <td><button class="btn btn-danger btn-sm" ' +
+                        'onclick="adminDeletePhoto(\'id_1781456155994_9kbkzyvk1\')">🗑 Удалить</button></td>\n' +
+                        '                    </tr>'
+                })
+                newImages += '</table>'
+                $('#adminPhotosTable').replaceWith(newImages);
+            }
+        }
+    })
 }
 
 function closeLightbox() {
