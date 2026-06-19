@@ -66,7 +66,6 @@ $('#fileInput').on('change', function () {
     const fileInput = $(this)[0];
     const file = fileInput.files[0];
     if (!file) {
-        console.warn('Выберите файл');
         return;
     }
 
@@ -79,7 +78,6 @@ $('#fileInput').on('change', function () {
         processData: false,
         contentType: false,
         success: function(res) {
-            console.log('Успех:', res);
             getImages()
         },
         error: function(xhr, status, err) {

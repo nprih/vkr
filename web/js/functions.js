@@ -28,9 +28,9 @@ function login(action){
 function getImages() {
     $.get(baseUrl + '/images', function(data) {
         if (data.images) {
-            if (data.images.length !== 0) {
+            // if (data.images.length !== 0) {
                 refreshImages(data.images)
-            }
+            // }
         }
     })
 }
@@ -60,7 +60,17 @@ function sendPost(post, url) {
 }
 
 function refreshImages(images) {
-    $('#adminPhotosTable').replaceWith(formatImages(images));
+    if (images.length !== 0) {
+        $('#adminPhotosTable').replaceWith(formatImages(images));
+        return
+    }
+    $('#adminPhotosTable').replaceWith(`
+        <div class="empty-state">
+            <div class="empty-state-icon">📸</div>
+            <h3>У вас пока нет фотографий</h3>
+            <p>Загрузите первую фотографию через форму выше</p>
+        </div>
+    `);
 }
 
 function formatImages(images) {
