@@ -25,11 +25,10 @@ function login(action){
     }
 }
 
-function getImages() {
+function refreshImages() {
     $.get(baseUrl + '/images', function(data) {
-        console.log(data)
         if (data) {
-            refreshImages(data)
+            $('.table-wrapper').html(data);
         }
     })
 }
@@ -64,46 +63,13 @@ function sendPost(post, url) {
     });
 }
 
-function refreshImages(table) {
-    $('.table-wrapper').html(table);
-}
-
-function formatImages(images) {
-    console.log("images: ", images)
-    let rows = [];
-    let newImages = `
-                    <table id="adminPhotosTable">
-                    <thead>
-                        <tr><th>Превью</th><th>Автор</th><th>Дата</th><th>Действия</th></tr>
-                    </thead>
-                    <tbody id="adminPhotosBody">
-                `
-    $.each(images, function (index, value) {
-        rows.push(`
-                        <tr>
-                            <td id="${value.id}" title="Нажмите для просмотра">
-                                <img class="thumb-mini" src="${value.url}" alt="миниатюра" style="cursor:pointer;">
-                            </td>
-                            <td>${value.author}</td>
-                            <td>${value.createdAt}</td>
-                            <td>
-                            <button class="btn btn-danger btn-sm">🗑 Удалить</button>
-                            </td>
-                        </tr>
-                    `);
-    })
-    newImages += rows.join('');
-    newImages += '</table>';
-    return newImages
-}
-
 function deleteImage(imageId){
     $.ajax({
         url: '/images/' + imageId,
         type: 'DELETE',
         success: function(response) {
             console.log('Удалено:', response);
-            $('tr#' + imageId).remove()
+            refreshImages()
         },
         error: function(xhr, status, error) {
             console.error('Ошибка:', error);

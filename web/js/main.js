@@ -78,7 +78,7 @@ $('#fileInput').on('change', function () {
         processData: false,
         contentType: false,
         success: function(res) {
-            getImages()
+            refreshImages()
         },
         error: function(xhr, status, err) {
             console.error('Ошибка:', status, err);
