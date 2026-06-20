@@ -283,12 +283,24 @@ func GetImagesHandler(c *gin.Context) {
 		return
 	}
 
-	images, err := db.GetUserImages(user.Id)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+	var images []db.UserImage
+	if value.IsAdmin {
+		images, err = db.GetAllUserImages()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+		}
+	} else {
+		images, err = db.GetUserImages(user.Id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+		}
 	}
+
+	log.Println(formatValues(images))
 
 	c.HTML(http.StatusOK, "photosBody.html", gin.H{
 		"values": formatValues(images),
