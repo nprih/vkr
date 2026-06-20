@@ -52,7 +52,7 @@ func main() {
 		auth.GET("/images", handler.GetImagesHandler)
 		auth.POST("/logout", handler.PostLogoutHandler)
 		auth.POST("/upload", handler.PostUploadHandler)
-		auth.DELETE("/images", handler.DeleteImagesHandler)
+		auth.DELETE("/images/:image_id", handler.DeleteImagesHandler)
 	}
 
 	admin := router.Group("/")

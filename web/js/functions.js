@@ -104,3 +104,17 @@ function formatImages(images) {
     newImages += '</table>';
     return newImages
 }
+
+function deleteImage(imageId){
+    $.ajax({
+        url: '/images/' + imageId,
+        type: 'DELETE',
+        success: function(response) {
+            console.log('Удалено:', response);
+            $('tr#' + imageId).remove()
+        },
+        error: function(xhr, status, error) {
+            console.error('Ошибка:', error);
+        }
+    });
+}

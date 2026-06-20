@@ -97,17 +97,7 @@ $('.thumb-mini').on('click', function () {
 })
 
 $('.delete_image').on('click', function () {
-    console.log($(this).attr('id'))
-
-    $.ajax({
-        url: '/images',
-        type: 'DELETE',
-        success: function(response) {
-            console.log('Удалено:', response);
-            // тут обновить UI, например удалить строку из таблицы
-        },
-        error: function(xhr, status, error) {
-            console.error('Ошибка:', error);
-        }
-    });
+    if (confirm('Вы действительно хотите удалить изображение?')) {
+        deleteImage($(this).attr('id'))
+    }
 })

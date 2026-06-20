@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 	"vkr/internal/db"
 	"vkr/internal/service"
 
@@ -284,7 +286,46 @@ func GetImagesHandler(c *gin.Context) {
 }
 
 func DeleteImagesHandler(c *gin.Context) {
+	setValue(c)
+	if !value.IsLogin || value.Login == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
+		return
+	}
+	imageID := c.Param("image_id")
+	intImageID, err := strconv.Atoi(imageID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	image, err := db.GetImageByID(intImageID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	err = db.DeleteImage(intImageID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	err = os.Remove(image.FilePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "file not found"})
+			return
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"message": "DeleteImagesHandler ",
+		"message": "Image deleted",
 	})
 }

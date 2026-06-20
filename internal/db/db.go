@@ -108,27 +108,22 @@ func GetUserImages(userId int64) ([]UserImage, error) {
 	return images, nil
 }
 
-//// DeleteImage - удаляет изображение из БД
-//func DeleteImage(imageID, userID int) error {
-//	query := `DELETE FROM user_images WHERE id = ? AND user_id = ?`
-//	_, err := DB.Exec(query, imageID, userID)
-//	return err
-//}
+func GetImageByID(imageID int) (*Image, error) {
+	db := repository.GetDB()
+	query := `SELECT * FROM user_images WHERE id = ?`
+	var img Image
+	err := db.QueryRow(query, imageID).Scan(
+		&img.Id, &img.UserId, &img.Filename, &img.OriginalName, &img.FilePath,
+		&img.FileSize, &img.MimeType, &img.Description, &img.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &img, nil
+}
 
-//// GetImageByID - получает изображение по ID
-//func GetImageByID(imageID int) (*Image, error) {
-//	query := `
-//        SELECT id, user_id, filename, original_name, file_path, file_size, mime_type, description, created_at
-//        FROM user_images
-//        WHERE id = ?
-//    `
-//	var img Image
-//	err := DB.QueryRow(query, imageID).Scan(
-//		&img.ID, &img.UserID, &img.Filename, &img.OriginalName,
-//		&img.FilePath, &img.FileSize, &img.MimeType, &img.Description,
-//		&img.CreatedAt)
-//	if err != nil {
-//		return nil, err
-//	}
-//	return &img, nil
-//}
+func DeleteImage(imageID int) error {
+	db := repository.GetDB()
+	query := `DELETE FROM user_images WHERE id = ?`
+	_, err := db.Exec(query, imageID)
+	return err
+}
