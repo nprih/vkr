@@ -40,6 +40,7 @@ function refreshImages(isadmin = false) {
 }
 
 function viewImage(src) {
+    console.log(src)
     document.getElementById('lightboxImg').src = src;
     document.getElementById('lightbox').style.display = 'flex';
     document.body.style.overflow = 'hidden';
