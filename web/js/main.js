@@ -97,14 +97,14 @@ $('.table-wrapper').on('click', '.thumb-mini', function() {
 });
 
 /** Удаление в профиле по нажатию кнопки удаления*/
-$('.table-wrapper').on('click', '.delete_image', function () {
+$('.profile-photo').on('click', '.delete_image', function () {
     if (confirm('Вы действительно хотите удалить изображение?')) {
         deleteImage($(this).attr('id'))
     }
 })
 
-$('.admin-photo.delete_image').on('click', function () {
+$('.admin-photo').on('click', '.delete_image', function () {
     if (confirm('Вы действительно хотите удалить изображение?')) {
-        deleteImage($(this).attr('id'))
+        deleteImage($(this).attr('id'), true)
     }
 })

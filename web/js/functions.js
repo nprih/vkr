@@ -25,10 +25,15 @@ function login(action){
     }
 }
 
-function refreshImages() {
+function refreshImages(isAdmin = false) {
     $.get(baseUrl + '/images', function(data) {
         if (data) {
-            $('.table-wrapper').html(data);
+            console.log(isAdmin)
+            if (isAdmin){
+                $('.admin-photo').html(data);
+            } else {
+                $('.table-wrapper').html(data);
+            }
         }
     })
 }
@@ -63,13 +68,18 @@ function sendPost(post, url) {
     });
 }
 
-function deleteImage(imageId){
+function deleteImage(imageId, isAdmin = false){
     $.ajax({
         url: '/images/' + imageId,
         type: 'DELETE',
         success: function(response) {
-            console.log('Удалено:', response);
-            refreshImages()
+            console.log('Удалено');
+            if (isAdmin){
+                refreshImages(isAdmin)
+            } else {
+                refreshImages()
+            }
+
         },
         error: function(xhr, status, error) {
             console.error('Ошибка:', error);
