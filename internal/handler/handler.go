@@ -307,6 +307,7 @@ func DeleteImagesHandler(c *gin.Context) {
 		})
 		return
 	}
+
 	err = db.DeleteImage(intImageID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
