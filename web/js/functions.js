@@ -25,11 +25,11 @@ function login(action){
     }
 }
 
-function refreshImages(isAdmin = false) {
+function refreshImages(isadmin = false) {
     $.get(baseUrl + '/images', function(data) {
         if (data) {
-            console.log(isAdmin)
-            if (isAdmin){
+            console.log(isadmin)
+            if (isadmin){
                 $('.admin-photo').html(data);
             } else {
                 $('.table-wrapper').html(data);

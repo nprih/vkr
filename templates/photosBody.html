@@ -14,10 +14,24 @@
         {{end}}
         </tbody>
     {{else}}
-        <div class="empty-state">
-            <div class="empty-state-icon">📸</div>
-            <h3>У вас пока нет фотографий</h3>
-            <p>Загрузите первую фотографию через форму выше</p>
-        </div>
+        {{if .values.is_admin}}
+                <thead>
+                    <tr><th>Превью</th><th>Автор</th><th>Дата</th><th>Действия</th></tr>
+                </thead>
+            </table>
+            <div class="empty-state">
+                <div class="empty-state-icon">📸</div>
+                <h3>Пока нет загруженных фотографий</h3>
+                <p>Загрузите первую фотографию через форму загрузки в профиле</p>
+            </div>
+
+
+        {{else}}
+                <div class="empty-state">
+                    <div class="empty-state-icon">📸</div>
+                    <h3>У вас пока нет фотографий</h3>
+                    <p>Загрузите первую фотографию через форму выше</p>
+                </div>
+            </table>
+        {{end}}
     {{end}}
-</table>
