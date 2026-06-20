@@ -103,6 +103,7 @@ $('.profile-photo').on('click', '.delete_image', function () {
     }
 })
 
+/** Удаление в админ-панели по нажатию кнопки удаления*/
 $('.admin-photo').on('click', '.delete_image', function () {
     if (confirm('Вы действительно хотите удалить изображение?')) {
         deleteImage($(this).attr('id'), true)
