@@ -6,6 +6,8 @@ let registerPassword = $('#registerPassword')
 let pathname = $(location).attr('pathname');
 let selected
 
+// $(document).ready(function() {
+
 /** Переход на главную по нажатию на логотип */
 $('.logo').on('click', function () {
     window.location.replace(baseUrl + '/')
@@ -87,7 +89,7 @@ $('#fileInput').on('change', function () {
 });
 
 /** Вызов модалки для просмотра картинки */
-$('.photo-card').on('click', function () {
+$('.photo-card').on('click',  function () {
     viewImage($(this).children('img').attr('src'))
 })
 
@@ -96,8 +98,17 @@ $('.thumb-mini').on('click', function () {
     viewImage($(this).attr('src'))
 })
 
-$('.delete_image').on('click', function () {
+/** Удаление в профиле по нажатию кнопки удаления*/
+$('.profile-photo .delete_image').on('click', function () {
     if (confirm('Вы действительно хотите удалить изображение?')) {
         deleteImage($(this).attr('id'))
     }
 })
+
+$('.admin-photo.delete_image').on('click', function () {
+    if (confirm('Вы действительно хотите удалить изображение?')) {
+        deleteImage($(this).attr('id'))
+    }
+})
+
+// });

@@ -6,7 +6,8 @@
     <p class="page-subtitle">Управление пользователями и фотографиями</p>
 
     <h2 style="margin-bottom:12px;font-size:1.2rem;">👥 Пользователи</h2>
-    <div class="table-wrapper" style="margin-bottom:32px;">
+
+    <div class="table-wrapper admin-user" style="margin-bottom:32px;">
         <table id="adminUsersTable">
             <thead>
             <tr><th>Логин</th><th>Роль</th><th>Дата регистрации</th><th>Фото</th><th>Действия</th></tr>
@@ -18,7 +19,7 @@
     </div>
 
     <h2 style="margin-bottom:12px;font-size:1.2rem;">🖼️ Все фотографии</h2>
-    <div class="table-wrapper">
+    <div class="table-wrapper admin-photo">
 
         {{template "photosBody.html" .}}
 
