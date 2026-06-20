@@ -160,8 +160,18 @@ func PostRegisterHandler(c *gin.Context) {
 
 func GetAdminHandler(c *gin.Context) {
 	setValue(c)
+
+	images, err := db.GetAllUserImages()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+	}
+
+	log.Println(images)
+
 	c.HTML(http.StatusOK, "admin.html", gin.H{
-		"values": formatValues(nil),
+		"values": formatValues(images),
 	})
 }
 
@@ -280,8 +290,8 @@ func GetImagesHandler(c *gin.Context) {
 		})
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"images": formatImages(images),
+	c.HTML(http.StatusOK, "photosBody.html", gin.H{
+		"values": formatValues(images),
 	})
 }
 

@@ -27,8 +27,8 @@ function login(action){
 
 function getImages() {
     $.get(baseUrl + '/images', function(data) {
-        if (data.images) {
-            refreshImages(data.images)
+        if (data) {
+            refreshImages(data)
         }
     })
 }
@@ -63,21 +63,12 @@ function sendPost(post, url) {
     });
 }
 
-function refreshImages(images) {
-    if (images.length !== 0) {
-        $('#adminPhotosTable').replaceWith(formatImages(images));
-        return
-    }
-    $('#adminPhotosTable').replaceWith(`
-        <div class="empty-state">
-            <div class="empty-state-icon">📸</div>
-            <h3>У вас пока нет фотографий</h3>
-            <p>Загрузите первую фотографию через форму выше</p>
-        </div>
-    `);
+function refreshImages(table) {
+    $('.table-wrapper').html(table);
 }
 
 function formatImages(images) {
+    console.log("images: ", images)
     let rows = [];
     let newImages = `
                     <table id="adminPhotosTable">

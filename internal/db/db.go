@@ -60,7 +60,7 @@ func SaveImageInfo(image *Image) error {
 func GetAllUserImages() ([]UserImage, error) {
 	db := repository.GetDB()
 
-	query := `SELECT ui.id, ui.file_path, u.login author 
+	query := `SELECT ui.id, ui.file_path, u.login author, ui.created_at 
 				FROM users u 
 				    INNER JOIN user_images ui ON u.id = ui.user_id 
 				ORDER BY ui.created_at DESC`
@@ -73,7 +73,7 @@ func GetAllUserImages() ([]UserImage, error) {
 	var images []UserImage
 	for rows.Next() {
 		var img UserImage
-		err := rows.Scan(&img.Id, &img.FilePath, &img.Author)
+		err := rows.Scan(&img.Id, &img.FilePath, &img.Author, &img.CreatedAt)
 		if err != nil {
 			return nil, err
 		}

@@ -19,14 +19,9 @@
 
     <h2 style="margin-bottom:12px;font-size:1.2rem;">🖼️ Все фотографии</h2>
     <div class="table-wrapper">
-        <table id="adminPhotosTable">
-            <thead>
-            <tr><th>Превью</th><th>Название</th><th>Автор</th><th>Видимость</th><th>Дата</th><th>Действия</th></tr>
-            </thead>
-            <tbody id="adminPhotosBody">
-            <tr><td colspan="6" style="text-align:center;color:var(--text-secondary);">Нет фотографий</td></tr>
-            </tbody>
-        </table>
+
+        {{template "photosBody.html" .}}
+
     </div>
 </section>
 
