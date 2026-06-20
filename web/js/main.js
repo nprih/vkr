@@ -93,6 +93,7 @@ $('.photo-card').on('click',  function () {
 
 /** Вызов модалки для просмотра картинки в профиле */
 $('.table-wrapper').on('click', '.thumb-mini', function() {
+    console.log($(this))
     viewImage($(this).attr('src'));
 });
 

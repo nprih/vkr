@@ -168,6 +168,14 @@ func GetAdminHandler(c *gin.Context) {
 		})
 	}
 
+	//user, err := db.GetUserByLogin(value.Login)
+	//if err != nil {
+	//	c.JSON(http.StatusInternalServerError, gin.H{
+	//		"error": "Пользователь не найден",
+	//	})
+	//	return
+	//}
+
 	log.Println(images)
 
 	c.HTML(http.StatusOK, "admin.html", gin.H{
