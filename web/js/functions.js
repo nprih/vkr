@@ -27,6 +27,7 @@ function login(action){
 
 function getImages() {
     $.get(baseUrl + '/images', function(data) {
+        console.log(data)
         if (data) {
             refreshImages(data)
         }

@@ -301,6 +301,15 @@ func DeleteImagesHandler(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
 		return
 	}
+
+	user, err := db.GetUserByLogin(value.Login)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Пользователь не найден",
+		})
+		return
+	}
+
 	imageID := c.Param("image_id")
 	intImageID, err := strconv.Atoi(imageID)
 	if err != nil {
@@ -336,7 +345,14 @@ func DeleteImagesHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Image deleted",
+	images, err := db.GetUserImages(user.Id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+	}
+
+	c.HTML(http.StatusOK, "photosBody.html", gin.H{
+		"values": formatValues(images),
 	})
 }
