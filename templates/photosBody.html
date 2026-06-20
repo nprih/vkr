@@ -1,3 +1,8 @@
+<div id="lightbox" style="display:none;" class="lightbox-overlay" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightboxImg" class="lightbox-img" src="" alt="Просмотр фото" onclick="event.stopPropagation()">
+</div>
+
 <table id="adminPhotosTable">
     {{if .values.images}}
         <thead>
