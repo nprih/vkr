@@ -106,7 +106,12 @@ $('.profile-photo').on('click', '.delete_image', function () {
 /** Удаление в админ-панели по нажатию кнопки удаления*/
 $('.admin-photo').on('click', '.delete_image', function () {
     if (confirm('Вы действительно хотите удалить изображение?')) {
-        deleteImage($(this).attr('id'), true)
+        let id = $('.row-user.active');
+        let selectedUserId = 0
+        if (id.length > 0){
+            selectedUserId = id.attr('id')
+        }
+        deleteImage($(this).attr('id'), true, selectedUserId)
     }
 })
 
@@ -127,14 +132,6 @@ $('.select').on('click', function () {
     }
 
 })
-
-function refreshUserImages(id = 0) {
-    $.get(baseUrl + '/images/admin/' + id, function(data) {
-        if (data) {
-            $('.admin-photo').html(data);
-        }
-    })
-}
 
 $('.delete_user').on('click', function () {
     console.log('delete: ' + $(this).attr('id'))

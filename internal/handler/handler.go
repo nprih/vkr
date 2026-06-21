@@ -276,6 +276,7 @@ func PostUploadHandler(c *gin.Context) {
 }
 
 func GetImagesHandler(c *gin.Context) {
+	log.Println("GetImagesHandler")
 	setValue(c)
 	if !value.IsLogin || value.Login == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
@@ -291,20 +292,11 @@ func GetImagesHandler(c *gin.Context) {
 	}
 
 	var images []db.UserImage
-	if value.IsAdmin {
-		images, err = db.GetAllUserImages()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-		}
-	} else {
-		images, err = db.GetUserImages(user.Id)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-		}
+	images, err = db.GetUserImages(user.Id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
 	}
 
 	c.HTML(http.StatusOK, "photosBody.html", gin.H{
@@ -313,6 +305,7 @@ func GetImagesHandler(c *gin.Context) {
 }
 
 func GetImagesAdminHandler(c *gin.Context) {
+	log.Println("GetImagesAdminHandler")
 	setValue(c)
 	if !value.IsLogin || value.Login == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
