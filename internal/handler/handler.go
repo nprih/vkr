@@ -175,7 +175,6 @@ func GetAdminHandler(c *gin.Context) {
 		})
 		return
 	}
-	log.Println(users)
 	c.HTML(http.StatusOK, "admin.html", gin.H{
 		"values": formatValues(images),
 		"users":  users,
@@ -305,7 +304,6 @@ func GetImagesHandler(c *gin.Context) {
 }
 
 func GetImagesAdminHandler(c *gin.Context) {
-	log.Println("GetImagesAdminHandler")
 	setValue(c)
 	if !value.IsLogin || value.Login == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
@@ -407,12 +405,37 @@ func DeleteImageHandler(c *gin.Context) {
 
 func DeleteUserHandler(c *gin.Context) {
 	setValue(c)
-	if !value.IsLogin || value.Login == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
+
+	userId := c.Param("user_id")
+	intUserId, err := strconv.Atoi(userId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	err = db.DeleteUser(intUserId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	path := "uploads/" + userId
+	err = os.RemoveAll(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "folder not found"})
+			return
+		}
+		log.Printf("failed to remove folder %s: %v", path, err)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "DeleteUserHandler",
+		"message": "User deleted",
 	})
 }

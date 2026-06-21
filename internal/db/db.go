@@ -148,3 +148,10 @@ func DeleteImage(imageID int) error {
 	_, err := db.Exec(query, imageID)
 	return err
 }
+
+func DeleteUser(userId int) error {
+	db := repository.GetDB()
+	_, err := db.Exec("DELETE FROM user_images WHERE user_id = ?", userId)
+	_, err = db.Exec("DELETE FROM users WHERE id = ?", userId)
+	return err
+}
