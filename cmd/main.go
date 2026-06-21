@@ -49,6 +49,7 @@ func main() {
 	auth.Use(service.AuthRequired())
 	{
 		auth.GET("/profile", handler.GetProfileHandler)
+		auth.GET("/images/admin/:user_id", handler.GetImagesAdminHandler)
 		auth.GET("/images", handler.GetImagesHandler)
 		auth.POST("/logout", handler.PostLogoutHandler)
 		auth.POST("/upload", handler.PostUploadHandler)

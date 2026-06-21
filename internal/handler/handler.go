@@ -168,18 +168,17 @@ func GetAdminHandler(c *gin.Context) {
 		})
 	}
 
-	//user, err := db.GetUserByLogin(value.Login)
-	//if err != nil {
-	//	c.JSON(http.StatusInternalServerError, gin.H{
-	//		"error": "Пользователь не найден",
-	//	})
-	//	return
-	//}
-
-	log.Println(images)
-
+	users, err := db.GetAllUsers()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	log.Println(users)
 	c.HTML(http.StatusOK, "admin.html", gin.H{
 		"values": formatValues(images),
+		"users":  users,
 	})
 }
 
@@ -312,6 +311,12 @@ func GetImagesHandler(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "photosBody.html", gin.H{
 		"values": formatValues(images),
+	})
+}
+
+func GetImagesAdminHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message": "GetImagesAdminHandler",
 	})
 }
 

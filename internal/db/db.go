@@ -108,6 +108,27 @@ func GetUserImages(userId int64) ([]UserImage, error) {
 	return images, nil
 }
 
+func GetAllUsers() ([]User, error) {
+	db := repository.GetDB()
+
+	rows, err := db.Query("SELECT id, login, is_admin FROM users")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []User
+	for rows.Next() {
+		var user User
+		err := rows.Scan(&user.Id, &user.Login, &user.Is_admin)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}
+
 func GetImageByID(imageID int) (*Image, error) {
 	db := repository.GetDB()
 	query := `SELECT * FROM user_images WHERE id = ?`

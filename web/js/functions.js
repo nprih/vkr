@@ -27,7 +27,6 @@ function login(action){
 
 function refreshImages(isadmin = false) {
     $.get(baseUrl + '/images', function(data) {
-        console.log(data)
         if (data) {
             console.log(isadmin)
             if (isadmin){

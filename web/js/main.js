@@ -109,3 +109,37 @@ $('.admin-photo').on('click', '.delete_image', function () {
         deleteImage($(this).attr('id'), true)
     }
 })
+
+$('.select').on('click', function () {
+    let id = $(this).attr('id')
+    let row = $('.row-user#' + id)
+    let user = $('td#'+ id +'.select.username').text()
+
+    if (row.hasClass('active')) {
+        row.removeClass('active')
+        $('.description').text('🖼️ Все фотографии')
+    } else {
+        $('.row-user').removeClass('active')
+        row.addClass('active')
+        $('.description').text('🖼️ Все фотографии пользователя ' + user)
+    }
+    refreshUserImages(id)
+})
+
+function refreshUserImages(id = 0) {
+    $.get(baseUrl + '/images/admin/' + id, function(data) {
+        console.log(data)
+        if (data) {
+            console.log(isadmin)
+            if (isadmin){
+                $('.admin-photo').html(data);
+            } else {
+                $('.table-wrapper').html(data);
+            }
+        }
+    })
+}
+
+$('.delete_user').on('click', function () {
+    console.log('delete: ' + $(this).attr('id'))
+})
