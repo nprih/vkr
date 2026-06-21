@@ -307,16 +307,46 @@ func GetImagesHandler(c *gin.Context) {
 		}
 	}
 
-	log.Println(formatValues(images))
-
 	c.HTML(http.StatusOK, "photosBody.html", gin.H{
 		"values": formatValues(images),
 	})
 }
 
 func GetImagesAdminHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "GetImagesAdminHandler",
+	setValue(c)
+	if !value.IsLogin || value.Login == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
+		return
+	}
+
+	userId := c.Param("user_id")
+	intUserId, err := strconv.Atoi(userId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	var images []db.UserImage
+	if intUserId == 0 {
+		images, err = db.GetAllUserImages()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+		}
+	} else {
+		images, err = db.GetUserImages(int64(intUserId))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+		}
+	}
+
+	c.HTML(http.StatusOK, "photosBody.html", gin.H{
+		"values": formatValues(images),
 	})
 }
 
@@ -335,8 +365,8 @@ func DeleteImagesHandler(c *gin.Context) {
 		return
 	}
 
-	imageID := c.Param("image_id")
-	intImageID, err := strconv.Atoi(imageID)
+	imageId := c.Param("image_id")
+	intImageId, err := strconv.Atoi(imageId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -344,7 +374,7 @@ func DeleteImagesHandler(c *gin.Context) {
 		return
 	}
 
-	image, err := db.GetImageByID(intImageID)
+	image, err := db.GetImageByID(intImageId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -352,7 +382,7 @@ func DeleteImagesHandler(c *gin.Context) {
 		return
 	}
 
-	err = db.DeleteImage(intImageID)
+	err = db.DeleteImage(intImageId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),

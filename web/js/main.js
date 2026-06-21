@@ -130,12 +130,7 @@ function refreshUserImages(id = 0) {
     $.get(baseUrl + '/images/admin/' + id, function(data) {
         console.log(data)
         if (data) {
-            console.log(isadmin)
-            if (isadmin){
-                $('.admin-photo').html(data);
-            } else {
-                $('.table-wrapper').html(data);
-            }
+            $('.admin-photo').html(data);
         }
     })
 }
