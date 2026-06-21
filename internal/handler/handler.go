@@ -423,7 +423,7 @@ func DeleteUserHandler(c *gin.Context) {
 		return
 	}
 
-	path := "uploads/users/" + userId
+	path := "uploads/users/" + userId + "/"
 	err = os.RemoveAll(path)
 	if err != nil {
 		if os.IsNotExist(err) {

@@ -135,5 +135,17 @@ $('.select').on('click', function () {
 
 /** Удаление пользователя и его картинок по нажатию кнопки удаления пользователя */
 $('.delete_user').on('click', function () {
-    deleteUser($(this).attr('id'))
+    if (confirm('Вы действительно хотите удалить пользователя?')) {
+        let id = $('.row-user.active');
+        let selectedUserId = 0
+        if (id.length > 0){
+            selectedUserId = id.attr('id')
+        }
+        deleteUser($(this).attr('id'))
+        refreshUserImages(selectedUserId)
+    }
 })
+
+function refreshUsers() {
+    
+}
