@@ -94,3 +94,7 @@ function deleteImage(imageId, isAdmin = false, selectedUserId = 0){
         }
     });
 }
+
+function deleteUser(id) {
+
+}

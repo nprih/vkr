@@ -133,6 +133,7 @@ $('.select').on('click', function () {
 
 })
 
+/** Удаление пользователя и его картинок по нажатию кнопки удаления пользователя */
 $('.delete_user').on('click', function () {
-    console.log('delete: ' + $(this).attr('id'))
+    deleteUser($(this).attr('id'))
 })
