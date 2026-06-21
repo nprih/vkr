@@ -49,17 +49,18 @@ func main() {
 	auth.Use(service.AuthRequired())
 	{
 		auth.GET("/profile", handler.GetProfileHandler)
-		auth.GET("/images/admin/:user_id", handler.GetImagesAdminHandler)
 		auth.GET("/images", handler.GetImagesHandler)
 		auth.POST("/logout", handler.PostLogoutHandler)
 		auth.POST("/upload", handler.PostUploadHandler)
-		auth.DELETE("/images/:image_id", handler.DeleteImagesHandler)
+		auth.DELETE("/images/:image_id", handler.DeleteImageHandler)
 	}
 
 	admin := router.Group("/")
 	admin.Use(service.AdminRequired())
 	{
 		admin.GET("/admin", handler.GetAdminHandler)
+		auth.GET("/images/admin/:user_id", handler.GetImagesAdminHandler)
+		auth.DELETE("/user/:user_id", handler.DeleteUserHandler)
 	}
 
 	router.Run(":" + config.Port)

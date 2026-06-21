@@ -343,7 +343,7 @@ func GetImagesAdminHandler(c *gin.Context) {
 	})
 }
 
-func DeleteImagesHandler(c *gin.Context) {
+func DeleteImageHandler(c *gin.Context) {
 	setValue(c)
 	if !value.IsLogin || value.Login == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
@@ -402,5 +402,17 @@ func DeleteImagesHandler(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "photosBody.html", gin.H{
 		"values": formatValues(images),
+	})
+}
+
+func DeleteUserHandler(c *gin.Context) {
+	setValue(c)
+	if !value.IsLogin || value.Login == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "DeleteUserHandler",
 	})
 }

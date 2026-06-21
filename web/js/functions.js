@@ -95,6 +95,22 @@ function deleteImage(imageId, isAdmin = false, selectedUserId = 0){
     });
 }
 
-function deleteUser(id) {
+function deleteUser(userId) {
+    $.ajax({
+        url: '/user/' + userId,
+        type: 'DELETE',
+        success: function(response) {
+            console.log(response)
 
+            // if (isAdmin){
+            //     refreshUserImages(selectedUserId)
+            // } else {
+            //     refreshImages()
+            // }
+
+        },
+        error: function(xhr, status, error) {
+            console.error('Ошибка:', error);
+        }
+    });
 }
