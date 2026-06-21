@@ -110,10 +110,10 @@ $('.admin-photo').on('click', '.delete_image', function () {
     }
 })
 
+/** Выбор пользователя в админке */
 $('.select').on('click', function () {
     let id = $(this).attr('id')
     let row = $('.row-user#' + id)
-    let user = $('td#'+ id +'.select.username').text()
 
     if (row.hasClass('active')) {
         row.removeClass('active')
@@ -122,7 +122,7 @@ $('.select').on('click', function () {
     } else {
         $('.row-user').removeClass('active')
         row.addClass('active')
-        $('.description').text('🖼️ Все фотографии пользователя ' + user)
+        $('.description').text('🖼️ Все фотографии пользователя ' + $('td#'+ id +'.select.username').text())
         refreshUserImages(id)
     }
 
