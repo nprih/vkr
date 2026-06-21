@@ -118,17 +118,18 @@ $('.select').on('click', function () {
     if (row.hasClass('active')) {
         row.removeClass('active')
         $('.description').text('🖼️ Все фотографии')
+        refreshUserImages(0)
     } else {
         $('.row-user').removeClass('active')
         row.addClass('active')
         $('.description').text('🖼️ Все фотографии пользователя ' + user)
+        refreshUserImages(id)
     }
-    refreshUserImages(id)
+
 })
 
 function refreshUserImages(id = 0) {
     $.get(baseUrl + '/images/admin/' + id, function(data) {
-        console.log(data)
         if (data) {
             $('.admin-photo').html(data);
         }
