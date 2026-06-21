@@ -6,6 +6,19 @@ let registerPassword = $('#registerPassword')
 let pathname = $(location).attr('pathname');
 let selected
 
+
+$('#loginUsername').on('keydown', function () {
+    if (event.key === 'Enter') {
+        $('#loginPassword').focus()
+    }
+})
+
+$('#registerUsername').on('keydown', function () {
+    if (event.key === 'Enter') {
+        $('#registerPassword').focus()
+    }
+})
+
 /** Переход на главную по нажатию на логотип */
 $('.logo').on('click', function () {
     window.location.replace(baseUrl + '/')
