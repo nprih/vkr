@@ -191,7 +191,3 @@ func DeleteUserImage(filePath string) error {
 	log.Printf("Файл изображения удален: %s", filePath)
 	return nil
 }
-
-func GetUserUploadDir(userID int) string {
-	return filepath.Join(BaseUploadDir, fmt.Sprintf("%d", userID))
-}
