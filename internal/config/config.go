@@ -13,6 +13,7 @@ var Port string
 var SessionSecret string
 var SessionLifetime string
 var SessionName string
+var DbPath string
 
 func Init() {
 	if err := godotenv.Load(); err != nil {
@@ -21,6 +22,7 @@ func Init() {
 		SessionSecret = "vcFCnDZjK7ohNCba6cAwU89H7284MK8E"
 		SessionLifetime = strconv.Itoa(60 * 60 * 1)
 		SessionName = "userSession"
+		DbPath = "./volumes/photo_bank"
 		return
 	}
 
@@ -28,9 +30,9 @@ func Init() {
 	SessionSecret = os.Getenv("SESSION_SECRET")
 	SessionLifetime = os.Getenv("SESSION_LIFETIME")
 	SessionName = os.Getenv("SESSION_NAME")
+	DbPath = "./volumes/photo_bank"
 
-	dbPath := "./volumes/photo_bank"
-	if err := repository.InitDB(dbPath); err != nil {
+	if err := repository.InitDB(DbPath); err != nil {
 		log.Fatalf("Не удалось инициализировать БД: %v", err)
 	}
 }
