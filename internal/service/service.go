@@ -23,7 +23,6 @@ const (
 	BaseUploadDir = "uploads/users"
 )
 
-// AllowedImageTypes - допустимые типы изображений
 var AllowedImageTypes = map[string]bool{
 	"image/jpeg": true,
 	"image/jpg":  true,
@@ -32,7 +31,6 @@ var AllowedImageTypes = map[string]bool{
 	"image/webp": true,
 }
 
-// UploadedImage - результат загрузки
 type UploadedImage struct {
 	Filename     string
 	OriginalName string
@@ -135,10 +133,8 @@ func SaveUserImage(fileHeader *multipart.FileHeader, userID int64) (*UploadedIma
 		return nil, fmt.Errorf("не удалось создать директорию: %v", err)
 	}
 
-	// 5. Генерируем уникальное имя файла
 	ext := strings.ToLower(filepath.Ext(fileHeader.Filename))
 	if ext == "" {
-		// Определяем расширение по MIME
 		switch mimeType {
 		case "image/jpeg", "image/jpg":
 			ext = ".jpg"
@@ -181,7 +177,6 @@ func SaveUserImage(fileHeader *multipart.FileHeader, userID int64) (*UploadedIma
 	}, nil
 }
 
-// DeleteUserImage - удаляет файл изображения
 func DeleteUserImage(filePath string) error {
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		return nil // Файла нет
@@ -197,7 +192,6 @@ func DeleteUserImage(filePath string) error {
 	return nil
 }
 
-// GetUserUploadDir - возвращает директорию загрузок пользователя
 func GetUserUploadDir(userID int) string {
 	return filepath.Join(BaseUploadDir, fmt.Sprintf("%d", userID))
 }
