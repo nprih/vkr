@@ -30,7 +30,7 @@ func Init() {
 	SessionSecret = os.Getenv("SESSION_SECRET")
 	SessionLifetime = os.Getenv("SESSION_LIFETIME")
 	SessionName = os.Getenv("SESSION_NAME")
-	DbPath = "./volumes/photo_bank"
+	DbPath = os.Getenv("DB_PATH")
 
 	if err := repository.InitDB(DbPath); err != nil {
 		log.Fatalf("Не удалось инициализировать БД: %v", err)
